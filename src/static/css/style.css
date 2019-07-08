@@ -1,0 +1,148 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+#head1 {
+  text-align: center!important;
+  height: 100px;
+  background-color: aliceblue;
+}
+#head1 .img-top {
+  width: 20px;
+  height: 10px;
+  display: none;
+}
+#head1 .img-active {
+  display: inline-block;
+}
+#bottom {
+  text-align: center!important;
+}
+.box {
+  width: 500px;
+  border: 1px solid #ccc;
+  margin: 100px auto;
+  padding: 5px;
+}
+.box .inner {
+  width: 500px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+.box .inner img {
+  width: 500px;
+  height: 300px;
+  vertical-align: top;
+}
+.box .inner ul {
+  list-style: none;
+}
+.box .inner ul li {
+  float: left;
+}
+.box .inner ol {
+  position: absolute;
+  height: 20px;
+  right: 20px;
+  bottom: 20px;
+  text-align: center;
+  padding: 5px;
+}
+.box .inner ol li {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  background-color: #fff;
+  margin: 5px;
+  cursor: pointer;
+}
+.box .inner #arr {
+  display: none;
+}
+.box .inner #arr span {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  margin-top: -20px;
+  background: #fff;
+  cursor: pointer;
+  line-height: 40px;
+  text-align: center;
+  font-weight: bold;
+  font-family: '黑体';
+  font-size: 30px;
+  color: #000;
+  opacity: 0.5;
+  border: 1px solid #fff;
+}
+.box .inner #arr .right {
+  right: 5px;
+  left: auto;
+}
+.head {
+  width: 500px;
+  height: 300px;
+  border: 1px solid #ccc;
+  margin: 100px auto;
+  padding: 5px;
+}
+.head .head-inner {
+  position: relative;
+  width: 500px;
+  height: 300px;
+  overflow: hidden;
+}
+.head .head-inner ul {
+  list-style: none;
+}
+.head .head-inner ul li {
+  float: left;
+}
+.head .head-inner ul li img {
+  width: 500px;
+  height: 300px;
+}
+.head .head-inner ol {
+  position: absolute;
+  height: 20px;
+  right: 20px;
+  bottom: 20px;
+  text-align: center;
+  padding: 5px;
+}
+.head .head-inner ol .current {
+  background-color: red;
+}
+.head .head-inner ol li {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  background-color: #fff;
+  margin: 5px;
+  cursor: pointer;
+}
+.head .head-inner .head-arr span {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  font-weight: bold;
+  font-family: '黑体';
+  font-size: 30px;
+  top: 50%;
+  left: 5px;
+  background: #fff;
+  margin-top: -20px;
+  text-align: center;
+  line-height: 50px;
+  color: #000;
+  opacity: 0.5;
+}
+.head .head-inner .head-arr .arr-left {
+  right: 5px;
+  left: auto;
+}
