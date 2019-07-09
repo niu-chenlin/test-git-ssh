@@ -1,47 +1,81 @@
+@font-face {
+  font-family: 'fa';
+  /* project id 1285444 */
+  src: url('//at.alicdn.com/t/font_1285444_aw4x4y1u1s.eot');
+  src: url('//at.alicdn.com/t/font_1285444_aw4x4y1u1s.eot?#iefix') format('embedded-opentype'), url('//at.alicdn.com/t/font_1285444_aw4x4y1u1s.woff2') format('woff2'), url('//at.alicdn.com/t/font_1285444_aw4x4y1u1s.woff') format('woff'), url('//at.alicdn.com/t/font_1285444_aw4x4y1u1s.ttf') format('truetype'), url('//at.alicdn.com/t/font_1285444_aw4x4y1u1s.svg#iconfont') format('svg');
+}
+.fa {
+  font-family: fa;
+  display: inline-block;
+  width: 30px;
+}
 * {
   margin: 0;
   padding: 0;
 }
-#head1 {
-  text-align: center!important;
-  height: 100px;
-  background-color: aliceblue;
+#head {
+  width: 100%;
+  height: 500px;
+  text-align: center;
+  cursor: pointer;
 }
-#head1 .img-top {
-  width: 20px;
-  height: 10px;
-  display: none;
+#head .head-images {
+  width: 100%;
+  height: inherit;
 }
-#head1 .img-active {
-  display: inline-block;
+#head .head-images img {
+  width: 100%;
+  height: inherit;
 }
-#bottom {
-  text-align: center!important;
+#head .nav {
+  position: absolute;
+  width: 50%;
+  height: 55px;
+  top: 10px;
+  right: 0;
+  background-color: white;
+  line-height: 50px;
 }
-.box {
+#head .nav ul {
+  list-style: none;
+  width: 100%;
+}
+#head .nav ul li {
+  font-size: 17px;
+  width: 145px;
+  float: left;
+}
+#head .nav ul li:hover {
+  font-size: 20px;
+}
+.box1 {
   width: 500px;
+  height: 300px;
   border: 1px solid #ccc;
   margin: 100px auto;
   padding: 5px;
 }
-.box .inner {
+.box1 .head-inner {
+  position: relative;
   width: 500px;
   height: 300px;
-  position: relative;
   overflow: hidden;
 }
-.box .inner img {
-  width: 500px;
-  height: 300px;
-  vertical-align: top;
-}
-.box .inner ul {
+.box1 .head-inner ul {
+  position: absolute;
   list-style: none;
+  width: 1000%;
+  left: 0;
+  top: 0;
 }
-.box .inner ul li {
+.box1 .head-inner ul li {
   float: left;
 }
-.box .inner ol {
+.box1 .head-inner ul li img {
+  width: 500px;
+  height: 300px;
+}
+.box1 .head-inner ol {
   position: absolute;
   height: 20px;
   right: 20px;
@@ -49,75 +83,10 @@
   text-align: center;
   padding: 5px;
 }
-.box .inner ol li {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  background-color: #fff;
-  margin: 5px;
-  cursor: pointer;
-}
-.box .inner #arr {
-  display: none;
-}
-.box .inner #arr span {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  left: 5px;
-  top: 50%;
-  margin-top: -20px;
-  background: #fff;
-  cursor: pointer;
-  line-height: 40px;
-  text-align: center;
-  font-weight: bold;
-  font-family: '黑体';
-  font-size: 30px;
-  color: #000;
-  opacity: 0.5;
-  border: 1px solid #fff;
-}
-.box .inner #arr .right {
-  right: 5px;
-  left: auto;
-}
-.head {
-  width: 500px;
-  height: 300px;
-  border: 1px solid #ccc;
-  margin: 100px auto;
-  padding: 5px;
-}
-.head .head-inner {
-  position: relative;
-  width: 500px;
-  height: 300px;
-  overflow: hidden;
-}
-.head .head-inner ul {
-  list-style: none;
-}
-.head .head-inner ul li {
-  float: left;
-}
-.head .head-inner ul li img {
-  width: 500px;
-  height: 300px;
-}
-.head .head-inner ol {
-  position: absolute;
-  height: 20px;
-  right: 20px;
-  bottom: 20px;
-  text-align: center;
-  padding: 5px;
-}
-.head .head-inner ol .current {
+.box1 .head-inner ol .current {
   background-color: red;
 }
-.head .head-inner ol li {
+.box1 .head-inner ol li {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -126,7 +95,7 @@
   margin: 5px;
   cursor: pointer;
 }
-.head .head-inner .head-arr span {
+.box1 .head-inner .head-arr span {
   width: 50px;
   height: 50px;
   position: absolute;
@@ -142,7 +111,7 @@
   color: #000;
   opacity: 0.5;
 }
-.head .head-inner .head-arr .arr-left {
+.box1 .head-inner .head-arr .arr-left {
   right: 5px;
   left: auto;
 }

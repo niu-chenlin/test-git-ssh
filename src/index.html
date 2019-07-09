@@ -3,43 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>wang_website</title>
+    <link rel="stylesheet" href="static/swiper/css/swiper.min.css">
+
     <link rel="icon" href="static/images/favicon.jpg">
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
-    <div class="head" id="head">
-        <div class="head-inner">
-            <ul>
-                <li><a href="#"><img src="static/images/head/1.jpg"></a></li>
-                <li><a href="#"><img src="static/images/head/2.jpg"></a></li>
-            </ul>
-            <ol>
-
-            </ol>
-            <div class="head-arr" id="arr">
-                <span class="arr-right" > > </span>
-                <span class="arr-left" id="left"> < </span>
+    <div id="head" class="head">
+        <div class="swiper-container head-images">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">1</div><!-- <img src="static/images/head/1.jpg">-->
+                <div class="swiper-slide">2</div>
+                <div class="swiper-slide">3</div>
             </div>
+            <div class="swiper-pagination swiper-pagination-bullets"></div>
+            <div class="swiper-button-next" tabindex="0" role="button" aria-label="Next slide" aria-disabled="false"></div>
+            <div class="swiper-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-disabled="false"></div>
         </div>
+        <div class="nav">
+            <ul>
+                <li><i class="fa">&#xe616;</i>首页</li>
+                <li><i class="fa">&#xe660;</i>故事</li>
+                <li><i class="fa">&#xe624;</i>服务</li>
+                <li><i class="fa">&#xe602;</i>帮助</li>
+                <li><i class="fa">&#xe655;</i>关于我们</li>
+            </ul>
+        </div>
+        <div class="info"></div>
     </div>
-    <!--<div id="head" class="">-->
-        <!--<div>-->
-            <!--<img class="img-top img-active" src="static/images/head/1.png" alt="">-->
-            <!--<img class="img-top" src="static/images/head/2.png" alt="">-->
-            <!--<a class="" href="javascript:void(0)" onclick="">-->
-                <!--<span class=""></span>-->
-                <!--<span>previous</span>-->
-            <!--</a>-->
-            <!--<a class="" href="javascript:void(0)" onclick="">-->
-                <!--<span class=""></span>-->
-                <!--<span>next</span>-->
-            <!--</a>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div id="bottom" class="">-->
-
-    <!--</div>-->
 </body>
 <script src="static/jquery-3.4.1.min.js"></script>
+<script src="static/swiper/js/swiper.min.js"></script>
 <script src="script/index.js"></script>
 </html>
