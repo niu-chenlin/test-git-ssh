@@ -36,11 +36,28 @@
   width: 100%;
   height: inherit;
 }
+#head .head-images .img-info {
+  z-index: 1;
+  width: 500px;
+  margin-top: 15%;
+  margin-left: 15%;
+  text-align: left;
+  line-height: 50px;
+}
 #head .head-images .img-info .title {
-  font-size: 17px;
+  padding: 5px;
+  font-size: xx-large;
 }
 #head .head-images .img-info .info {
-  font-size: 15px;
+  padding: 5px;
+  font-size: x-large;
+}
+#head .head-images .img-info .button {
+  margin: 5px;
+  width: 200px;
+  height: 50px;
+  border: 1px solid;
+  text-align: center;
 }
 #head .nav {
   position: absolute;
@@ -68,6 +85,49 @@
 #head .nav ul li a {
   text-decoration: none;
   color: black;
+}
+#bottom {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid #cbcbc4;
+  text-align: center;
+}
+#bottom .context .strip {
+  display: inline-block;
+  width: 10%;
+  margin: 20px;
+}
+#bottom .context .strip span {
+  color: #484848 !important;
+  font-size: 15px;
+  font-weight: bold;
+}
+#bottom .context .strip ul {
+  margin-top: 20px;
+}
+#bottom .context .strip ul li {
+  margin: 5px;
+  list-style: none;
+  color: #767676 !important;
+  font-size: 15px;
+  font-weight: bold;
+}
+#bottom .base {
+  width: 60%;
+  height: 35px;
+  border-top: 1px solid #cbcbc4;
+  margin-left: 20%;
+}
+#bottom .base img {
+  width: 20px;
+}
+#bottom .base span {
+  line-height: 30px;
+  vertical-align: text-bottom;
+  color: #767676 !important;
+  font-size: 15px;
+  font-weight: bold;
 }
 .box1 {
   width: 500px;
