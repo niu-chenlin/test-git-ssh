@@ -86,9 +86,34 @@
   text-decoration: none;
   color: black;
 }
+#middle {
+  text-align: center;
+  margin-top: 20px;
+}
+#middle .title span {
+  display: inline-block;
+  border-left: 200px solid #dddddd;
+  border-right: 200px solid #dddddd;
+  line-height: 1px;
+  text-align: center;
+  width: 200px;
+  margin: 20px 0;
+}
+#middle .products {
+  width: 75%;
+  border: 1px solid #ddd;
+  height: 500px;
+  margin: 20px auto;
+}
+#middle .products .product {
+  display: inline-block;
+  width: 350px;
+  height: 210px;
+  border: 1px solid #ddd;
+  margin: 20px 20px;
+}
 #bottom {
   width: 100%;
-  position: absolute;
   bottom: 0;
   border-top: 1px solid #cbcbc4;
   text-align: center;
