@@ -123,11 +123,20 @@ var mySwiper = new Swiper('.swiper-container', {
     loop : true,               // 回路
     navigation: {   //前进后退按钮
         nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        prevEl: '.swiper-button-prev'
     },
     pagination: {           //分页器
         el: '.swiper-pagination',
         dynamicBullets: true,  //当你的slide很多时，开启后，分页器小点的数量会部分隐藏。
-        clickable :true,       //点击时切换
-    },
+        clickable :true,      //点击时切换
+    }
+});
+
+$(document).ready(function(){
+    $('#relation').click(function() {
+        $('#relation-frame').fadeToggle(500);
+    });
+    $('.top span').click(function() {
+        $('#relation-frame').fadeToggle(500);
+    });
 });
