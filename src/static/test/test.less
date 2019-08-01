@@ -1,0 +1,137 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+#div {
+  width: 200px;
+  height: 200px;
+  #div1 {
+    width: 50px;
+    height: 50px;
+    -webkit-box-sizing: padding-box;
+  }
+  #div2 {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+#div3 {
+  width: 0;
+  height: 0;
+  border: 100px solid transparent;
+  border-bottom: 100px solid blue;
+}
+
+#div4 {
+  width: 100px;
+  height: 100px;
+  background: url("../../static/images/team/1.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
+.ball {
+  left: 50px;
+  transition: 0.4s ease-out;
+}
+.ball.slide-out {
+  transform: translateX(450px);
+}
+h6 {
+  text-transform: uppercase;
+}
+
+
+.div1 {
+  width: 200px;
+  height: 200px;
+  background-color: #dddddd;
+}
+.div2 {
+  width: 200px;
+  height: 200px;
+  background-color: #dddddd;
+}
+.div3 {
+  width: 200px;
+  height: 200px;
+  background-color: #dddddd;
+  .div3-div1 {
+    width: 50px;
+    height: 50px;
+    background-color: #007aff;
+  }
+}
+
+.box {
+  width: 500px;
+  height: 300px;
+  border: 1px solid #000000;
+  margin: 0 auto;
+  .inner {
+    position: relative;
+    width: 500px;
+    height: 300px;
+    overflow: hidden;
+    ul {
+      position: absolute;
+      list-style: none;
+      width: 1000%;
+      left: 0;
+      top: 0;
+      li {
+        float: left;
+        img {
+          width: 500px;
+          height: 300px;
+        }
+      }
+    }
+    ol {
+      position: absolute;
+      height: 20px;
+      right: 20px;
+      bottom: 20px;
+      text-align: center;
+      padding: 5px;
+      .current{
+        background-color: red;
+      }
+      li {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        background-color: #fff;
+        margin: 5px;
+        cursor: pointer;
+      }
+    }
+    .arr {
+      display: none;
+      span {
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 5px;
+        background: #fff;
+        font-size: 30px;
+        font-weight: bold;
+        font-family: '黑体';
+        text-align: center;
+        line-height: 50px;
+        color: #000;
+        opacity: 0.5;
+      }
+      #right {
+        right: 5px;
+        left: auto;
+      }
+    }
+  }
+}
+

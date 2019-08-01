@@ -1006,7 +1006,6 @@ function domEvent() {//事件监听
         console.log("第二次");
     }
 }
-
 function eventEntrust() {
     //事件捕获：当一个事件触发后,从Window对象触发，不断经过下级节点,直到目标节点，在事件到达目标节点之前的过程就是捕获阶段。所有经过的节点,都会触发对应的事件
     //事件冒泡：当一个事件触发后,从目标节点触发，不断经过上级节点,直到Window对象，在事件到达Window对象之前的过程就是冒泡阶段。所有经过的节点,都会触发对应的事件
@@ -1023,20 +1022,362 @@ function eventEntrust() {
         div3.innerText = 'div3';
         div.appendChild(div3);
     });
-
-
 }
+function css() {//Edge Reflow
+    //不要重复设置：大多数CSS属性的值都是从DOM树中向上一级的元素继承的，因此才被命名为级联样式表。以font属性为例-它总是从父级继承的，您不必为页面上的每个元素都单独设置。
+    //不要DIY，多使用代码库：CSS社区非常庞大，不断有新的代码库出现。它们有各种用途，从微小的片段到构建响应式应用程序的整体框架。其中大多数也是开源的。
+    //不要使用!important：现在看起来可以快速的解决问题，但最终可能会导致大量的重写。
+    //用text-transform转换字母 text-transform: capitalize 首字母大写; uppercase：全大写  lowercase：全小写
+    //使用AutoPrefixer达到更好的兼容性：自动添加css前缀 在线工具：Autoprefixer 文本编辑器插件：Sublime Text, Atom 代码库：Autoprefixer (PostCSS)
+    //压缩CSS文件：在生产环境中使用.min版本，同时为开发保留常规版本。 在线工具：CSS Minifier, CSS Compressor 文本编辑器插件： Sublime Text, Atom 代码库： Minfiy (PHP), CSSO, CSSNano (PostCSS, Grunt, Gulp)
+    //Caniuse：使用caniuse来检查您使用的属性是否得到了广泛的支持
+    //验证css：在线工具：W3 Validator, CSS Lint 文本编辑器插件：Sublime Text, Atom 代码库：stylelint (Node.js, PostCSS), css-validator (Node.js)
+    //BEM命名规范：BEM分别代表块（Block）、元素（Element）、修饰符（Modifier）。 .form__submit--disabled .B__.E-M
+    let margin = {
+        //1.注意外边距折叠：上下的垂直外边距margin在同时存在时会发生外边距折叠
+    };
+    let flex = {
+        //2.flex弹性布局：使用flex进行布局 display: flex;
+    };
+    let reset = {
+        //3.重置元素的CSS样式： *{m p box-sizing: border-box;}
+    };
+    let boxSizing = {
+        //4.标准盒子||IE盒子：标准盒子的宽高不包括padding border IE盒子的宽高包括padding border
+        // box-sizing：选择盒模型解析方式  1.content-box，border和padding不计算入width之内 2.padding-box，padding计算入width内 3.border-box，border和padding计算入width之内，其实就是怪异模式了~
+    };
+    //可替换元素：可替换元素（replaced element）的展现效果不是由 CSS 来控制的。这些元素是一种外部对象，它们外观的渲染，是独立于 CSS 的。
+    //<iframe><video><embed><img>
+    let background = {
+        //5.最好使用background属性来引入图片，而不是<img>标签。
+        //background: url("../../static/images/team/1.jpg");
+        //background-position: center; //图片位置居中 上下左右 百分值 px  Firefox 和 Opera 中需要把 background-attachment 属性设置为 "fixed"
+        //background-size: cover; //包含图片
+        //background-repeat: no-repeat; //平铺方式 不平铺（重复）
+        //object-fit: fill | contain | cover | none | scale-down 指定可替换元素的内容对象在元素盒区域中的填充方式。（有些类似于 background-size ）
+        //object-position: 上下左右 百分值 px 指定可替换元素的内容对象在元素盒区域中的位置。（类似于 background-position ）
+    };
+    let table = {
+        //border-collapse: collapse; //去除表格多重边框
+    }
+    let annotation = {
+        //对于大的区域划分或者重要的组件可以使用下面的注释样式
+        /*---------------
+            #Header
+        ---------------*/
+        //对于细节和不太重要的样式可以使用单行的注释方式：
+        /*   Footer Buttons   */
+        //另外，请记住，CSS中没有//注释，只有/**/注释
 
+        //当class或者ID包含多个单词时，应使用连字符（-）
+        //当涉及到命名时，您还可以考虑BEM，它遵循一组原则，提供基于组件并增加一致性的开发方法。
+    }
+    let transform = {
+        //最好使用transform()函数来创建元素的位移或大小动画，尽量不要直接改变元素的width，height以及left/top/bottom/right属性值。
+        // transition: 0.4s ease-out;   ease-out{transform: translateX(450px);}
+    }
+    let unit = {
+        //Em, Rem与px
+        //em - 设置元素为1em，其大小与父元素的font-size属性有关。这个单位用于媒体查询中，特别适用于响应式开发，但是由于em单位在每一级中都是相对于父元素进行计算的，所以要得出某个子元素em单位对应的px值，有时候是很麻烦的。
+        //rem - 相对于<html>元素的font-size大小计算，rem使得统一改变页面上的所有标题和段落文本大小变得非常容易。
+        //px - 像素单位是最精确的，但是不适用于自适应的设计。px单位是可靠的，并且易于理解，我们可以精细的控制元素的大小和移动到1px。
+    }
+}
+function cssCenter() {
+    //行内元素水平居中：1.设置父元素（父元素必须是块级元素）text-align: center; 2.设置子元素display: table; margin: auto;
+        //注：1.使用text-align居中的条件是子元素必须是行内元素 2.使用margin居中的条件是当前元素必须有width
+
+    //块级元素水平居中：1.宽度确定？1.margin: auto;:不确定：子元素使用display: inline-block;后宽度会被撑开
+        //2.父元素为相对定位，子元素为绝对定位，子元素的left:50%，子元素的 margin-left: -元素宽度的一半px||transform: translateX(-50%);
+        //3.使用flexbox布局实现:   display: flex; justify-content: center;
+            // 注：justify-content 用于设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式。
+
+    //单行内元素垂直居中：1.设置单行行内元素的"行高等于盒子的高"即可；
+        //注：1.line-height = 基线和基线之间的距离 vertical-align:设置文本对基线的对齐方式
+    //多行内元素垂直居中：1.给父元素设置 display: table-cell; vertical-align: middle;
+        //注：1.table-cell元素会作为一个表格单元格显示，所以可设置vertical-align
+
+    //块级元素垂直居中：1.父元素为相对定位，子元素为绝对定位，子元素的top:50%，子元素的 margin-top: -元素高度的一半px||transform: translateY(-50%);
+        //2.使用flexbox布局实现:   display: flex; align-items: center;
+            // 注：align-items 用于设置或检索弹性盒子元素在侧轴（纵轴）方向上的对齐方式。
+
+    //水平垂直居中：1.父元素为相对定位，子元素为绝对定位，子元素上下左右:0 margin:auto;
+        //2.父元素为相对定位，子元素为绝对定位，子元素top: 50%; left: 50%; transform: translate(-50%, -50%);
+        //3.使用flexbox布局实现: display: flex; justify-content: center;align-items: center;
+}
+function carousel() {
+    //核心实现：移动ul的left来确定图片的显示
+    //核心步骤：
+        //1.根据li创建小按钮并设置小按钮的onmouseover事件（事件1.清除所有小按钮class。2.根据当前元素的index来确定ul的left移动到哪里）
+        //2.
+    let box = document.getElementById("box");
+    let inner = box.children[0];
+    let ulObj = inner.children[0];
+    let list = ulObj.children;
+    let olObj = inner.children[1];
+    let arr = document.getElementById("arr");
+    let imgWidth = inner.offsetWidth;
+    let right = document.getElementById("right");
+    let pic = 0;
+
+    //根据i个数创建小按钮
+    for(let i = 0; i < list.length; i++) {
+        let liObj = document.createElement("li");
+        olObj.append(liObj);
+        liObj.innerText = (i+1);
+        liObj.setAttribute("index", i);
+
+        //为按钮注册onmouseover事件
+        liObj.onmouseover = function() {
+            //先清除所有按钮的样式
+            for(let j = 0; j < olObj.children.length; j++) {
+                olObj[j].removeAttribute("class");
+            }
+            this.className = "current";
+            pic = this.getAttribute("index");
+            animate(ulObj,-pic*imgWidth);
+        }
+    }
+
+    //设置ol中第一个li的背景
+    olObj.children[0].className = "current";
+    //克隆一个ul中第一个li,加入到ul中的最后=====克隆
+    ulObj.appendChild(ulObj.children[0].cloneNode(true));
+
+    let timeId = setInterval(onmouseclickHandle, 3000);
+    //左右焦点实现点击切换图片功能
+    box.onmouseover = function() {
+        arr.style.disabled = "block";
+        clearInterval(timeId);
+    };
+    box.onmouseout = function() {
+        arr.style.disabled = "none";
+        timeId = setInterval(onmouseclickHandle, 3000);
+    };
+    right.onclick = onmouseclickHandle;
+
+    function onmouseclickHandle() {
+        //如果pic的值是3,恰巧是ul中li的个数-1的值,此时页面显示第4个图片,而用户会认为这是第一个图,
+        //所以,如果用户再次点击按钮,用户应该看到第二个图片
+        if(pic === list.length-1) {
+            //如何从第4个图,跳转到第一个图
+            pic = 0;//先设置pic=0
+            ulObj.style.left = 0 + "px"; //把ul的位置还原成开始的默认位置
+        }
+        pic++;//立刻设置pic加1,那么此时用户就会看到第二个图片了
+        animate(ulObj, -pic * imgWidth);//pic从0的值加1之后,pic的值是1,然后ul移动出去一个图片
+        //如果pic==3说明,此时显示第4个图(内容是第一张图片),第一个小按钮有颜色,
+        if (pic === list.length - 1) {
+            //第3个按钮颜色干掉
+            olObj.children[olObj.children.length - 1].className = "";
+            //第一个按钮颜色设置上
+            olObj.children[0].className = "current";
+        } else {
+            //干掉所有的小按钮的背景颜色
+            for (let i = 0; i < olObj.children.length; i++) {
+                olObj.children[i].removeAttribute("class");
+            }
+            olObj.children[pic].className = "current";
+        }
+    }
+    right.onclick=function () {
+        if (pic==0){
+            pic=list.length-1;
+            ulObj.style.left=-pic*imgWidth+"px";
+        }
+        pic--;
+        animate(ulObj,-pic*imgWidth);
+        for (let i = 0; i < olObj.children.length; i++) {
+            olObj.children[i].removeAttribute("class");
+        }
+        //当前的pic索引对应的按钮设置颜色
+        olObj.children[pic].className = "current";
+    };
+
+    //设置任意的一个元素,移动到指定的目标位置
+    function animate(element, target) {
+        clearInterval(element.timeId);
+        //定时器的id值存储到对象的一个属性中
+        element.timeId = setInterval(function () {
+            //获取元素的当前的位置,数字类型
+            let current = element.offsetLeft;
+            //每次移动的距离
+            let step = 10;
+            step = current < target ? step : -step;
+            //当前移动到位置
+            current += step;
+            if (Math.abs(current - target) > Math.abs(step)) {
+                element.style.left = current + "px";
+            } else {
+                //清理定时器
+                clearInterval(element.timeId);
+                //直接到达目标
+                element.style.left = target + "px";
+            }
+        }, 10);
+    }
+}
+function carouse2() {
+    let box = document.getElementById("box");
+    let inner = box.children[0];
+    let ulObj = inner.children[0];
+    let list = ulObj.children;
+    let olObj = inner.children[1];
+    let arr = document.getElementById("arr");
+    let imgWidth = inner.offsetWidth;
+    let right = document.getElementById("right");
+    let left = document.getElementById("left");
+    let pic = 0;
+
+    for(let i = 0; i < list.length; i++) {
+        let liObj = document.createElement("li");
+        liObj.setAttribute("index", i);
+        liObj.innerText = i+1;
+        olObj.appendChild(liObj);
+
+        liObj.onmouseover = function() {
+            for(let j = 0; j < olObj.children.length; j++) {
+                olObj.children[j].removeAttribute("class");
+            }
+            this.className = "current";
+            pic = this.getAttribute("index");
+            animate(ulObj, -pic*imgWidth);
+        }
+    }
+    olObj.children[0].className = "current";
+    ulObj.appendChild(ulObj.children[0].cloneNode(true)); //为什么要克隆第一个到最后？
+
+    // let timeId = setInterval(onmouseclickHandle, 2000);
+    box.onmouseover = function() {
+        arr.style.display = "block";
+        // clearInterval(timeId);
+    };
+    box.onmouseout = function() {
+        arr.style.display = "none";
+        // timeId = setInterval(onmouseclickHandle, 2000);
+    };
+    right.onclick = onmouseclickHandle;
+    left.onclick = function() {
+        if(pic === 0) {
+            pic = list.length-1;
+            ulObj.style.left = -pic * imgWidth + "px";
+        }
+        pic--;
+        animate(ulObj, -pic * imgWidth);
+        for (let i = 0; i < olObj.children.length; i++) {
+            olObj.children[i].removeAttribute("class");
+        }
+        olObj.children[pic].className = "current";
+    };
+    function onmouseclickHandle() {
+        if(pic === list.length-1) {
+            pic = 0;
+            ulObj.style.left = 0 + "px";
+        }
+        pic++; //如果没有克隆 最后一张执行到此处时直接跳到了第二张 （最后一张的下一张会animate到第二张）
+        animate(ulObj, -pic * imgWidth);
+        if (pic === list.length - 1) {
+            //第3个按钮颜色干掉
+            olObj.children[olObj.children.length - 1].className = "";
+            //第一个按钮颜色设置上
+            olObj.children[0].className = "current";
+        } else {
+            //干掉所有的小按钮的背景颜色
+            for (let i = 0; i < olObj.children.length; i++) {
+                olObj.children[i].removeAttribute("class");
+            }//
+            olObj.children[pic].className = "current";
+        }
+    }
+    function animate(element, target) {
+        clearInterval(element.timeId);
+        //定时器的id值存储到对象的一个属性中
+        element.timeId = setInterval(function() {
+            let current = element.offsetLeft; //获取元素当前位置
+            let step = 10; //每次移动位置
+            step = current < target ? step : -step;
+            //当前移动到位置
+            current += step;
+            if (Math.abs(current - target) > Math.abs(step)) {
+                element.style.left = current + "px";
+            } else {
+                //清理定时器
+                clearInterval(element.timeId);
+                //直接到达目标
+                element.style.left = target + "px";
+            }
+        }, 10);
+    }
+}
+function paixu() {
+    let arr = [7,1,3]; //,6,4,2,8,0,4,6,8,10
+    //1.
+    // for(let i = 0; i < 100; i++) {
+    //     arr.push(Math.ceil(Math.random()*100));
+    // }
+
+    //外层循环length-1次 内层循环length-1-i次（内层把当前值和j+1个值逐个比较 如果符合条件就移动，排到最后的值是确定顺序的值，所以arr.length-i（-1的原因是j会和j+1比较，而最后的值没有+1））
+    // for(let i = 0; i < arr.length-1; i++) {//冒泡排序 i=最后的时候已经不可能有后面的数和它比了 所以-1（内层-1已经控制）
+    //     let flag = true; //冒泡优化
+    //     for(let j = 0; j < arr.length-1-i; j++) { //arr.length-1-i 排到最后的已经是最小的 不做比较   每轮比较少比较一次。（每一轮都会比较出一个最大值，然后后一轮没有必要再比较了，所以每比较一轮，就少比较一次。。。）
+    //         if(arr[j] < arr[j+1]) { //j+1小于自己的话 会停在这里
+    //             let tmp = arr[j];
+    //             arr[j] = arr[j+1];
+    //             arr[j+1] = tmp;
+    //             flag = false;
+    //         }
+    //     }
+    //     if(flag) { //如果本轮比较没有任何元素相互交换位置，那么说明已经比较完成，可以跳出循环。 没毛用
+    //         break;
+    //     }
+    // }
+
+    //外层循环length-1 内层循环从i+1的位置找到后面最小的数并标记 然后互换i和最小标记的位置
+    // let minIndex, temp;
+    // for(let i = 0; i < arr.length-1; i++) {//选择排序 在时间复杂度上表现最稳定的排序算法之一，用到它的时候，数据规模越小越好
+    //     minIndex = i;
+    //     for(let j = i + 1; j < arr.length; j++) {
+    //         if(arr[j] < arr[minIndex]) { //寻找最小的数并标记 使后面的数都和标记数比较
+    //             minIndex = j;            //将最小数的索引保存
+    //         }
+    //     }
+    //     if(minIndex !== i) {
+    //         temp = arr[i];
+    //         arr[i] = arr[minIndex];
+    //         arr[minIndex] = temp;
+    //     }
+    // }
+
+    // let preIndex, current;
+    // for(let i = 1; i < arr.length; i++) { //插入排序 取出一个没有经过排序的往前面找
+    //     preIndex = i - 1; //前一个下标
+    //     current = arr[i]; //现在的值 1.把现在的值拿出来（从第二个开始）和前一个比较 2.如果前一个大于现在的 3.把现在的值搞成和前一个一样（实现大的后移）
+    //     while(preIndex >= 0 && arr[preIndex] > current) {//arr[preIndex]：前一个 current：现在的 你的比我的大我就跟你换
+    //         arr[preIndex+1] = arr[preIndex];//arr[preIndex+1]：现在的 = arr[preIndex]：前一个 你的比我的大我就要你的
+    //         preIndex--;
+    //     }
+    //     arr[preIndex+1] = current;//arr[preIndex+1]：（preIndex--;）前一个 = current：现在的 我的就给你了
+    // }
+
+    // let len = arr.length,
+    //     temp,
+    //     gap = 1;
+    // while(gap < len/3) {          //动态定义间隔序列
+    //     gap =gap*3+1;
+    // }
+    // for (gap; gap > 0; gap = Math.floor(gap/3)) { //希尔排序
+    //     for (let i = gap; i < len; i++) {
+    //         temp = arr[i];
+    //         for (var j = i-gap; j >= 0 && arr[j] > temp; j-=gap) {
+    //             arr[j+gap] = arr[j];
+    //         }
+    //         arr[j+gap] = temp;
+    //     }
+    // }
+
+    return arr;
+}
 (function() {
-    let div = document.getElementById("div");
-    div.addEventListener('click', (e) => {
-        console.log(e.target);
-        console.log("把事件委托到了div上");
-        let div3 = document.createElement('div');
-        div3.setAttribute('class', 'div3');
-        div3.innerText = 'div3';
-        div.appendChild(div3);
-    });
 
 })();
 
