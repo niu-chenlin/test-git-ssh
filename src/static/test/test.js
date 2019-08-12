@@ -1097,13 +1097,16 @@ function cssCenter() {
     //多行内元素垂直居中：1.给父元素设置 display: table-cell; vertical-align: middle;
         //注：1.table-cell元素会作为一个表格单元格显示，所以可设置vertical-align
 
-    //块级元素垂直居中：1.父元素为相对定位，子元素为绝对定位，子元素的top:50%，子元素的 margin-top: -元素高度的一半px||transform: translateY(-50%);
+    //块级元素垂直居中：1.子元素为绝对定位，子元素的top:50%，子元素的 margin-top: -元素高度的一半px||transform: translateY(-50%);
         //2.使用flexbox布局实现:   display: flex; align-items: center;
             // 注：align-items 用于设置或检索弹性盒子元素在侧轴（纵轴）方向上的对齐方式。
 
-    //水平垂直居中：1.父元素为相对定位，子元素为绝对定位，子元素上下左右:0 margin:auto;
-        //2.父元素为相对定位，子元素为绝对定位，子元素top: 50%; left: 50%; transform: translate(-50%, -50%);
-        //3.使用flexbox布局实现: display: flex; justify-content: center;align-items: center;
+    //水平垂直居中：1.父元素为相对定位，子元素为绝对定位，子元素上下左右:0 margin:auto;（前提是要确定子元素的宽高，并且父元素的宽高要明确100%）行块均可以）
+        //2.父元素为相对定位，子元素为绝对定位，子元素top: 50%; left: 50%; transform: translate(-50%, -50%);（行块均可以）
+        //3.使用flexbox布局实现: display: flex; justify-content: center;align-items: center;（行块均可以）
+        //4.其它结合方案：1.父元素（父元素必须是块级元素）text-align: center; 2.给父元素设置 display: table-cell; vertical-align: middle;（父元素宽高要确定）（行块均可以）
+        //5.其它结合方案：1.父元素margin: 0 auto;确定宽度 2.子元素position: absolute; top: 50%; transform: translateY(-50%);（行块均可以）
+
 }
 function carousel() {
     //核心实现：移动ul的left来确定图片的显示
@@ -1376,6 +1379,44 @@ function paixu() {
     // }
 
     return arr;
+}
+function vueOrReact() {
+    //vue和react共同点：1.同样都使用了虚拟DOM 2.提供了响应式 (Reactive) 和组件化 (Composable) 的视图组件。3.将注意力集中保持在核心库，而将其他功能如路由和全局状态管理交给相关的库。
+    //区别一、react：在 React 应用中，当某个组件的状态发生变化时，它会以该组件为根，重新渲染整个组件子树。 如要避免不必要的子组件的重渲染，你需要在所有可能的地方使用 PureComponent，或是手动实现 shouldComponentUpdate 方法。同时你可能会需要使用不可变的数据结构来使得你的组件更容易被优化。
+    //PureComponent:
+        // 1.继承PureComponent时，不能再重写shouldComponentUpdate，否则会引发警告
+        // 2.继承PureComponent时，进行的是浅比较，也就是说，如果是引用类型的数据，只会比较是不是同一个地址，而不会比较具体这个地址存的数据是否完全一致
+        // 3.浅比较会忽略属性或状态突变的情况，其实也就是，数据引用指针没变而数据被改变的时候，也不新渲染组件。但其实很大程度上，我们是希望重新渲染的。所以，这就需要开发者自己保证避免数据突变。
+    //注：使用 PureComponent 和 shouldComponentUpdate 时，需要保证该组件的整个子树的渲染输出都是由该组件的 props 所决定的
+    //相比vue：在 Vue 应用中，组件的依赖是在渲染过程中自动追踪的，所以系统能精确知晓哪个组件确实需要被重渲染。你可以理解为每一个组件都已经自动获得了 shouldComponentUpdate，并且没有上述的子树问题限制。
+    //Vue 的这个特点使得开发者不再需要考虑此类优化，从而能够更好地专注于应用本身
+
+    //区别二、在react中一切皆可javaScript(JSX) vue中
+    //JSX渲染函数的优势
+        // 1.可以使用完整的编程语言 JavaScript 功能来构建你的视图页面，比如可以使用临时变量、JS 自带的流程控制、以及直接引用当前 JS 作用域中的值等等
+        // 2.开发工具对 JSX 的支持相比于现有可用的其他 Vue 模板还是比较先进的 (比如，linting、类型检查、编辑器的自动完成)。
+    //Vue 也提供了渲染函数，甚至支持 JSX。然而，我们默认推荐的还是模板
+    //我们可以把组件区分为两类：一类是偏视图表现的 (presentational)，一类则是偏逻辑的 (logical)。我们推荐在前者中使用模板，在后者中使用 JSX 或渲染函数。
+    //Vue 在不同组件间强制使用单向数据流
+    //在 Vue 中指令和组件分得更清晰。指令只封装 DOM 操作，而组件代表一个自给自足的独立单元——有自己的视图和数据逻辑。在 AngularJS 中，每件事都由指令来做，而组件只是一种特殊的指令。
+    //Vue 有更好的性能，并且非常非常容易优化，因为它不使用脏检查。因为它使用基于依赖追踪的观察系统并且异步队列更新，所有的数据变化都是独立触发，除非它们之间有明确的依赖关系。
+}
+function vue() {
+    var obj = {
+        foo: 'bar'
+    };
+    Object.freeze(obj);//这会阻止修改现有的属性，也意味着响应系统无法再追踪变化。
+    new Vue({
+        el: '#app',
+        data: obj
+    });
+    //不要在选项属性或回调上使用箭头函数 因为箭头函数并没有 this，this 会作为变量一直向上级词法作用域查找，直至找到为止，经常导致 Uncaught TypeError: Cannot read property of undefined 或 Uncaught TypeError: this.myMethod is not a function 之类的错误。
+
+    //声明周期钩子：1.beforeCreate:创建实例前 2.created:创建实例后
+    //3.beforeMount:创建DOM前 4.mounted:创建DOM后
+    //5.beforeUpdate:更新DOM前 6.updated:更新DOM后
+    //7.beforeDestroy:注销DOM前 6.destroyed:注销DOM后
+    //计算属性:computed
 }
 (function() {
 
