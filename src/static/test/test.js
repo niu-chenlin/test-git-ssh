@@ -260,9 +260,40 @@ function unique() {//数组去重 6种方法 1.indexOf 2.ES6的includes 3.把数
     }
     function qc5(arr) { //ES6 Set ，类似于数组，但 Set 的成员具有唯一性 基于这一特性，就非常适合用来做数组去重了
         return Array.from(new Set([...arr])); //ES6：Array.from()方法从一个类似数组或可迭代对象中创建一个新的数组实例。
+        //NaN和undefined都可以被存储在Set 中， NaN之间被视为相同的值（尽管 NaN !== NaN）。
+    }
+    function qc6(arr) { //第1种方法扩展，类似indexOf使用Array方法 find filter
+        let ret = [];
+        for(let i = 0; i < arr.length; i++) {
+            let r = ret.find((a) => {
+                return a === arr[i];
+                // if(a === arr[i]) { //此操作会有意想不到的结果
+                //     return a;
+                // }
+            });
+            if(!r) {
+                ret.push(arr[i]);
+            }
+        }
+        return ret;
+    }
+    function qc7(arr) { //第1种方法扩展，类似indexOf使用Array方法 every(直到找到false就停止遍历)，some(只要有一项满足就是true 直到找到true就停止遍历)
+        var ret = [arr[0]];
+        for(var i = 1; i < arr.length; i++) {
+            var r = ret.every((a) => {
+                if(a === arr[i]) {
+                    return false;
+                }
+                return true;
+            });
+            if(r) {
+                ret.push(arr[i]);
+            }
+        }
+        return ret;
     }
 }
-function Set(arr) {//Set的简单实现
+function Set11(arr) {//Set的简单实现
     window.Set = window.Set || function() {
         function SetRe(arr) {
             this.items = arr ? qc1(arr): [];
@@ -727,10 +758,10 @@ function eventLoop() {//js事件循环机制
 
 //事件循环进阶：macrotask与microtask（宏观任务与微观任务）
 //一次事件循环：先运行macroTask队列中的一个，然后运行microTask队列中的所有任务。接着开始下一次循环（只是针对macroTask和microTask，一次完整的事件循环会比这个复杂的多）。
-//JS中分为两种任务类型：macrotask和microtask，在ECMAScript中，microtask称为jobs，macrotask可称为task
+//JS中分为两种异步任务类型：macrotask和microtask，在ECMAScript中，microtask称为jobs，macrotask可称为task
 //macrotask（又称之为宏任务），可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行）
     //浏览器为了能够使得JS内部task与DOM任务能够有序的执行，会在一个task执行结束后，在下一个 task 执行开始前，对页面进行重新渲染（task->渲染->task->...）
-//microtask（又称为微任务），可以理解是在当前 task 执行结束后立即执行的任务 也就是说，在当前task任务后，下一个task之前，在渲染之前  所以它的响应速度相比setTimeout（setTimeout是task）会更快，因为无需等渲染 也就是说，在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）
+//microtask（又称为微任务），可以理解是在当前 task 执行结束后立即执行的任务 也就是说，在当前task任务后，下一个task之前，在渲染之前  所以它的响应速度相比setTimeout（setTimeout是task）会更快，因为无需等渲染 也就是说，在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）（微任务永远在宏任务之前执行）
 // macroTask: 主代码块, setTimeout, setInterval, setImmediate, requestAnimationFrame, I/O, UI rendering（可以看到，事件队列中的每一个事件都是一个macrotask）
 // microTask: process.nextTick, Promise, Object.observe, MutationObserver
 
@@ -739,12 +770,24 @@ function eventLoop() {//js事件循环机制
 // 而栈中的代码执行完毕，就会读取事件队列中的事件，去执行那些回调
 // 如此循环
 // 注意，总是要等待栈中的代码执行完毕后才会去读取事件队列中的事件
-
+//消息队列执行顺序：宏任务(script)->微任务->渲染or垃圾回收->宏任务（微任务会阻塞渲染）
 }
 function letOrVar() {
     //ES6 明确规定，如果区块中存在let和const命令，这个区块对这些命令声明的变量，从一开始就形成了封闭作用域。凡是在声明之前就使用这些变量，就会报错。
     let name = "name"; //let：1.变量声明不会提升（当它们包含的词法环境被实例化时会被创建，但只有在变量的词法绑定已经被求值运算后，才能够被访问。） 2.重复声明报错
     var name1 = "name"; //var：1.变量声明会提升   2.重复声明不报错且赋值覆盖
+
+    //let||const 1.声明的变量不允许再以任何形式重新声明
+    // 2.使用let定义的变量会被提升到代码块的顶部。但是如果在声明前访问该变量，JavaScript会抛出异常ReferenceError: is not defined。
+    // 3.使用const定义的常量会被提升到代码块的顶部。由于存在临时死亡区间，常量和let在声明之前不能被访问。如果在声明之前访问常量，JavaScript会抛出异常：ReferenceError: is not defined。
+    // 4.类声明会被提升到块级作用域的顶部。但是如果你在声明前使用类，JavaScript会抛出异常ReferenceError: is not defined。
+
+    //const 1.必须初始化 let不用必须
+    var a = 0;
+    //let a = 1; //运行报错 Identifier 'x' has already been declared（标识符已经声明）
+    // const b; ///编译运行报错 const variable without initializer is not allowed（必须初始化）
+    const b = 20;
+    //a = 10; //编译运行报错  Assignment to constant variable（赋值给常变量）
 }
 function digui() { // 递归获取JSON子节点
     let json = {
@@ -1087,7 +1130,7 @@ function cssCenter() {
     //行内元素水平居中：1.设置父元素（父元素必须是块级元素）text-align: center; 2.设置子元素display: table; margin: auto;
         //注：1.使用text-align居中的条件是子元素必须是行内元素 2.使用margin居中的条件是当前元素必须有width
 
-    //块级元素水平居中：1.宽度确定？1.margin: auto;:不确定：子元素使用display: inline-block;后宽度会被撑开
+    //块级元素水平居中：1.宽度确定？1.margin: auto;:不确定：行内子元素使用display: inline-block;后宽度会被撑开
         //2.父元素为相对定位，子元素为绝对定位，子元素的left:50%，子元素的 margin-left: -元素宽度的一半px||transform: translateX(-50%);
         //3.使用flexbox布局实现:   display: flex; justify-content: center;
             // 注：justify-content 用于设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式。
@@ -1418,15 +1461,279 @@ function vue() {
     //7.beforeDestroy:注销DOM前 6.destroyed:注销DOM后
     //计算属性:computed
 }
+function exeFun() {
+    //js解析执行过程
+    //分2个阶段1.预处理阶段 2.运行阶段
+    //预处理阶段：1.读取分析整个源代码 2.先扫描函数声明，之后扫描变量（此时函数冲突会覆盖，变量冲突会忽略）
+    // 2.将扫描到的函数和变量保存到一个对象中（全局的保存到window对象中）
+    // 3.变量的值是undefined，函数的值则指向该函数（是一个函数字符串）
+    // 形式如：window = {a : undefined, f : 'function(){alert(a);var a = 5;}'}
+    //运行阶段：1.逐行运行，变量赋值，函数调用
+    //函数执行过程：1.预处理阶段：a.将函数的参数添加到一个对象（暂定为：词法对象）b.扫描函数声明，之后扫描变量(var声明)
+    // c.将扫描到的函数和方法添加到词法对象里面 d.变量的值是undefined，函数的值则指向该函数（与全局的一样）
+    console.log(t1); // ƒ t1() {const x = 10;}  函数冲突会覆盖，变量冲突会忽略
+    function t1() {
+        const a = 20;
+    }
+    var t1 = 100;
+    function t1() {
+        const x = 10;
+    }
+
+    console.log(b); //undefined
+    var b = 5;
+    var b = function () { //匿名函数赋值给变量 so 预处理时忽略
+        console.log("xx");
+    }
+
+    function d(num2){
+        console.log(num2); // 2 运行时形参已经完成赋值 so = 2
+        var num2 = 5; //预处理时忽略此声明 因为已经有num2
+        console.log(num2); // 5
+    };
+    d(2);
+
+    function f(num){ //无论是形参还是函数中声明的变量，JS对他们的处理是没有区别的，都是保存在这个函数的变量对象中作为局部变量进行处理
+        console.log(num);
+        // var num = 9;
+        function num(){ var x = 0}
+        function num(){ var x = 10} //函数声明的优先级高于变量申明的优先级 函数体内声明的函数会提升到函数的第一行
+    }
+    f(6);
+
+    var foo = {n : 1};
+    function fooFun(f){
+        console.log(f.n);
+        f.n = 3;
+        console.log(f.n);
+        var f = {n: 100}; //重新赋值 与外部foo切断引用
+        console.log(f.n);
+    }
+    fooFun(foo);
+    console.log(foo.n); // 3
+}
+function arrowsFun() {
+    //箭头函数：
+    // 1.没有自己的this argument super new.target
+    // 2.当要执行的代码块只有一条return语句时，可省略大括号和return关键字：
+    var t1 = () => 10; //省略大括号时，默认return
+    console.log(t1()); // 10
+    var t2 = () => {10}; //使用大括号时，不会return
+    console.log(t2()); // undefined
+}
+function testIterator() {
+    //一种数据结构只要部署了 Iterator 接口，我们就称这种数据结构是“可遍历的”（iterable）。
+    // ES6 规定，默认的 Iterator 接口部署在数据结构的Symbol.iterator属性，或者说，一个数据结构只要具有Symbol.iterator属性，就可以认为是“可遍历的”
+    // Symbol.iterator属性本身是一个函数，就是当前数据结构默认的遍历器生成函数。执行这个函数，就会返回一个遍历器。
+    // ES6 的有些数据结构原生具备 Iterator 接口（比如数组），即不用任何处理，就可以被for...of循环遍历
+    // Array Map Set String TypedArray 函数的 arguments 对象 NodeList 对象
+    // 对象（Object）之所以没有默认部署 Iterator 接口，是因为对象的哪个属性先遍历，哪个属性后遍历是不确定的，需要开发者手动指定。
+
+    //iterator是一个具有next方法的对象
+    //它的放回至少有一个对象和两个属性value（值）和done（是否被迭代过）
+    function makeIterator(arr) {
+        var nextIndex = 0;
+        return {
+            next: function() {//使用闭包保存index
+                return nextIndex < arr.length ? {value: arr[nextIndex++]} : {done: true}
+            }
+        }
+    };
+    let it = makeIterator([1,2,3]);
+    console.log(it.next());
+
+    class RangeIterator { //迭代器类的写法
+        constructor(start, stop) {
+            this.value = start;
+            this.stop = stop;
+        }
+        [Symbol.iterator]() {return this};
+        next() {
+            let value = this.value;
+            if(value < this.stop) {
+                this.value ++;
+                return {value: this.value, done: false};
+            }
+            return {done: true, value: undefined}
+        }
+    }
+
+    var obj = { x: 1, y: 2, z: 3 }; //使对象可迭代
+    //方案一
+    obj[Symbol.iterator] = function() {
+        let self = this;
+        return {
+            _nextDone: 0,
+            next: function() {
+                if(this._nextDone === Object.keys(self).length) {
+                    return {value: undefined, done: true}
+                } else {
+                    let v = self[Object.keys(self)[this._nextDone]];
+                    this._nextDone++;
+                    return {value: v, done: false}
+                }
+            }
+        }
+    };
+    console.log([...obj]);
+    //方案二 Generator 函数
+    obj[Symbol.iterator] = function*() {
+        yield 1;
+        yield 2;
+        yield 3;
+    }
+}
+function* generator() {
+    // generator ES6 提供的一种异步编程解决方案
+    // 语法上，首先可以把它理解成，Generator 函数是一个状态机，封装了多个内部状态。
+    // 执行 Generator 函数会返回一个遍历器对象，也就是说，Generator 函数除了状态机，还是一个遍历器对象生成函数。
+    // 返回的遍历器对象，可以依次遍历 Generator 函数内部的每一个状态。
+    //与普通函数的区别：1.返回一个遍历器对象 2.不会立即调用，只有手动调用next()才执行
+    yield 'hello';
+    yield 'word';
+    //return 'ending'; //yield和return 区别：1.yield具有记忆功能，记忆下一次的位置 2.一个函数内只能执行一次return，yield可执行多次
+    //async await
+    async function teas() { //async 函数就是 Generator 函数的语法糖。
+        await 'hello';
+        await 'word';
+        //与Generator 函数区别：
+        // 1.内置执行器，不用手动调用next()
+        // 2.yield命令后面只能是 Thunk 函数或 Promise 对象，而async函数的await命令后面，可以是 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时会自动转成立即 resolved 的 Promise 对象）。
+        // 3.async函数的返回值是 Promise 对象，Generator 函数返回一个遍历器对象。
+        // 4.更好的语义。
+    }
+}
+function privateModule() {
+    //js模块模式
+    var Module = (function() { //私有作用域
+        var _name = "my module"; //_私有变量（_私有约定）
+        return {
+            myFunction() {
+                console.log(_name);
+            }
+        }
+    })();
+    Module.myFunction();
+}
+function closore() {
+    //闭包的应用场景一 为一个在某一函数执行前先执行的函数提供参数 比如：采用函数引用方式的setTimeout调用
+    function callLater(paramA, paramB, paramC) {
+        /*使用函数表达式创建并放回一个匿名内部函数的引用*/
+        return (function () {
+            /*
+            这个内部函数将被setTimeout函数执行；
+            并且当它被执行时，
+            它能够访问并操作外部函数传递过来的参数
+            */
+            paramA[paramB] = paramC;
+        });
+    }
+    var funcRef = callLater(elStyle, "display", "none"); //使用函数表达式创建并放回一个匿名内部函数的引用 为什么使用闭包：不使用闭包返回将直接执行
+    setTimeout(funcRef, 500);//使setTimeout的第一个函数引用可传递参数
+
+    //闭包的应用场景二 分配一个函数对象的引用，以便在未来的某个时间执行该函数 比如：将函数关联到对象的实例方法
+    function winObjEvent(obj, eventName) {
+        return (function(e) {
+            e = e || window.event;
+            obj[eventName](e, this); //返回的闭包中的this指向el
+        })
+    }
+    function DhtmlObj(elId) {
+        var el = document.getElementById(elId);
+        if(el) {
+            el.onclick = winObjEvent(this, 'doOnClick'); //当前this 指向实例对象 返回的闭包中的this指向el
+            el.onmouseover = winObjEvent(this, "doMouseOver");
+            el.onmouseout = winObjEvent(this, "doMouseOut");
+        }
+    }
+    DhtmlObj.prototype.doOnClick = function (event, element) {
+        //doOnClick body
+        console.log(event);
+        console.log(element);
+    };
+    DhtmlObj.prototype.doMouseOver = function (event, element) {
+        //doMouseOver body
+    };
+    DhtmlObj.prototype.doMouseOut = function (event, element) {
+        //doMouseOut body
+    };
+    var dh = new DhtmlObj('tid');
+
+    //闭包的应用场景三
+    var getImgInPositionedDivHtml = (function () {
+        var buffAr = [
+            '<div id="',
+            '',   //index 1, DIV ID attribute
+            '" style="position:absolute;top:',
+            '',   //index 3, DIV top position
+            'px;left:',
+            '',   //index 5, DIV left position
+            'px;width:',
+            '',   //index 7, DIV width
+            'px;height:',
+            '',   //index 9, DIV height
+            'px;overflow:hidden;\"><img src=\"',
+            '',   //index 11, IMG URL
+            '\" width=\"',
+            '',   //index 13, IMG width
+            '\" height=\"',
+            '',   //index 15, IMG height
+            '\" alt=\"',
+            '',   //index 17, IMG alt text
+            '\"><\/div>'
+        ];
+        return (function (url, id, width, height, top, left, altText) {
+            buffAr[1] = id;
+            buffAr[3] = top;
+            buffAr[5] = left;
+            buffAr[13] = (buffAr[7] = width);
+            buffAr[15] = (buffAr[9] = height);
+            buffAr[11] = url;
+            buffAr[17] = altText;
+
+            return buffAr.join('');
+        });
+    })();
+}
+function tHistory() {
+    // HTML5定义了两种用于历史记录管理的机制。
+    // 其中比较简单的历史记录管理技术就是利用location.hash和hashchange事件。
+    window.location.hash = '123'; //url后加#123 会在浏览器的历史记录中添加一条记录 页面可后退
+    // 支持HTML5的浏览器一旦发现片段标识符发生了改变，就会在Window对象上触发一个hashchange事件。 可以通过设置window.onhashchange为一个处理程序函数
+
+    // 第二种 window.history
+    // 属性 length声明了浏览器历史列表中的元素数量
+    // state返回一个表示历史堆栈顶部的状态的值。这是一种可以不必等待popstate事件而查看状态而的方式 用于存储history.pushState(data)和history.repalceState(data)的data数据。不同浏览器的读写权限不一样。
+    // scrollRestoration允许Web应用程序在历史导航上显示地设置默认滚动恢复行为。此属性可以是自动的auto或者手动的manual
+    // 方法 forward() 调用该方法的效果等价于点击前进按钮或调用 history.go(1)。
+    // back() 方法可加载历史列表中的前一个 URL（如果存在）。
+    // go() 方法可加载历史列表中的某个具体的页面。
+    // H5方法 pushState() 用于向history对象添加当前页面的记录，并且改变浏览器地址栏的URL。 不会触发页面刷新，只是导致history对象发生变化，地址栏会有反应
+    // replaceState()类似于pushState()，只是将当前页面状态替换为新的状态
+    // onpopstate事件
+}
 (function() {
 
 })();
 
 
+var el = document.getElementById("tid");
+el.onclick = function() {
+    console.log(window.history);
+    // window.history.pushState({page: 1}, null, 'test111.html');
+    window.location.hash = '123';
+    console.log(window.location.hash);
+};
+window.onpopstate = function() {
+    console.log("onpopstate");
+};
 
-
-
-
+function jsonp() {
+    var s = document.createElement('script');
+    s.src = './test.json';
+    document.body.appendChild(s);
+}
+jsonp();
 //堆栈是一种按序排列的数据结构，只能在一端(称为栈顶(top))对数据项进行插入和删除
 // 1.请你谈谈Cookie
 // Cookie虽然在持久保存客户端数据提供了方便 分担了服务起存储的负担 但是还有许多局限性   持久保存客户端数据
