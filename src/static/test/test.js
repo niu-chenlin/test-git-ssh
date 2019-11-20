@@ -8,6 +8,7 @@ function isStatic(value) { //检测数据是不是原始数据
         typeof value === 'boolean' ||
         typeof value === 'undefined' ||
         typeof value === 'symbol' ||
+        //typeof null | array | /^&/正则 | Boolean(true) === 'object'; 返回Object。typeof function 返回function。 typeof 1/0 返回NaN
         value === null //==会进行类型转换 ===不会进行类型转换 也就是说===一旦类型不同直接false
     )
 }
@@ -17,7 +18,7 @@ function isObject(value) { //判断数据是不是引用数据类型
 }
 function isArray(value) { //检测数据是不是数组 原因typeof 无法返回array js中怪异的行为和规范之一就是Array的类型Object
     //1.instanceof 判断左边对象是否为右边类的实例
-    return (
+    return ( //toString为Object的原型方法，而Array 、Function等类型作为Object的实例，都重写了toString方法。 Function类型返回内容为函数体的字符串，Array类型返回元素组成的字符串.....
         value instanceof Array ||
         Array.isArray(value) ||
         Object.prototype.toString.call(value) == '[object Array]'
@@ -25,7 +26,7 @@ function isArray(value) { //检测数据是不是数组 原因typeof 无法返�
 }
 function isType(value) { //检测数据是什么类型
     let type = Object.prototype.toString.call(value);
-    //js原始数据类型-基本：string number boolean nudefined null symbol(ES6)
+    //js原始数据类型-基本：string number boolean undefined null symbol(ES6)
     //js原始数据类型-复杂：Object 复杂类型包括：Function Array Date RegExp
     switch (type) {
         case "[object String]":
@@ -34,20 +35,22 @@ function isType(value) { //检测数据是什么类型
             return "数字";
         case "[object Boolean]":
             return "布尔";
-        case "[object Undefined]":
-            return "未定义";
-        case "[object Null]":
-            return "空";
         case "[object Function]":
             return "函数";
         case "[object Array]":
             return "数组";
+        case "[object Object]":
+            return "对象";
         case "[object Date]":
             return "日期";
         case "[object RegExp]":
             return "正则";
-        case "[object Object]":
-            return "对象";
+        case "[object Math]":
+            return "数学对象";
+        case "[object Undefined]":
+            return "未定义";
+        case "[object Null]":
+            return "空";
     }
 }
 function getRawType(value) {//返回值的类型
@@ -61,13 +64,15 @@ function isEmpty(value) { //判断value是否为null
     if(Object.prototype.toString.call(value) === '[object Array]') return value.length;
     if(Object.prototype.toString.call(value) === '[object Object]') {
         for(let key in value) {
-            if(value.hasOwnProperty(key)) {
+            if(value.hasOwnProperty(key)) { //用来检测给定的属性名是否是对象的的自有属性
                 return false;
             }
         }
     }
 }
-
+// 基本数据类型：字符串 String、数字 Number、布尔Boolean  es6：symbol let s1 = Symbol(||'another symbol') 每个Symbol实例都是唯一的 因此，当你比较两个Symbol实例的时候，将总会返回false
+// 复合数据类型：数组 Array、对象 Object
+// 特殊数据类型：Null 空对象、Undefined 未定义
 /**
  * 工具功能函数
  */
@@ -75,8 +80,12 @@ function cached(fn) { //记忆函数：缓存函数的运算结果
     let cache = Object.create(null);
     return function cacheFn(str) {
         let hit = cache[str];
-        return hit || (cache[str] = fn(str))
+        return hit || (cache[str] = fn(str)) //把结果赋值给cache保存
     }
+    // let ret = cached1(function(a) {
+    //     return a + 10;
+    // });
+    // console.log(ret(5));
 }
 function camelize(str) {//_命名替换为驼峰命名
     return str.replace(/_(\w)/g, function(z, a, b) {
@@ -115,7 +124,7 @@ function simpleClone() {//对象属性复制，浅拷贝 Object.assign方法用�
     }
     //or let clone = JSON.parse( JSON.stringify(String) );
 }
-function deepClone(value, deep) {//深拷贝 有待研究
+function deepClone(value, deep) {//深拷贝 有待研究 (修改拷贝副本不会影响主本)
     if(isStatic(value)){
         return value
     }
@@ -680,7 +689,8 @@ function getStrIndex(value, type, str) {//获取字符在value中的下标 4种i
         return value.findIndex((s) => {return s == str});
     }
     if(type == "前") { //1个原生方法 2个正则方法
-        return value.indexOf(str) || value.search(str) || (value.match(str).index || new RegExp(str).exec(value).index);
+        return value.indexOf(str) || value.search(str) ||
+            (value.match(str).index || new RegExp(str).exec(value).index);
     }
     return value.lastIndexOf(str);
 }
@@ -770,7 +780,70 @@ function eventLoop() {//js事件循环机制
 // 而栈中的代码执行完毕，就会读取事件队列中的事件，去执行那些回调
 // 如此循环
 // 注意，总是要等待栈中的代码执行完毕后才会去读取事件队列中的事件
-//消息队列执行顺序：宏任务(script)->微任务->渲染or垃圾回收->宏任务（微任务会阻塞渲染）
+//消息队列执行顺序：全局宏任务(script)->微任务->渲染or垃圾回收->宏任务（微任务会阻塞渲染）
+//宏任务中的事件放在callback queue（回调队列）中，由事件循环线程维护；微任务的事件放在微任务队列中，由js引擎线程维护。
+//     在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）。
+
+    setTimeout(function() { //不会准确无误的按照预期的时间去执行定时器里面的代码
+        console.log("setTimeout");
+    }, 500); //一个原因是W3C标准规定setTimeout中最小的时间周期是4毫秒，凡是低于4ms的时间间隔都按照4ms来处理。
+    for(let i = 0; i < 100000; i++) {
+        //其实还有一个重要的原因 主线程碰到定时器的时候，是不会直接处理的，应该是先把定时器事件交给定时器线程去处理 等主线程空闲的时候再来执行事件队列里面的操作
+        console.log(i);
+    }
+
+    // 应该使用setTimeout还是setInterval：
+    // setInterval是规定每隔固定的时间就往定时器线程中推入一个事件，这样做有一个问题，就是累积效应。
+    // 累积效应：就是如果定时器里面的代码执行所需的时间大于定时器的执行周期，就会出现累计效应，简单来说就是上一次定时器里面的操作还没执行完毕，下一次定时器事件又来了
+    // 排在后面的操作会被累积起来，然后在很短的时间内连续触发，这可能或造成性能问题（比如集中发出ajax请求）。 setInterval的最短间隔时间是10毫秒
+    var say = function() {
+        setTimeout(say, 1000);
+        console.log('hello world');
+    };
+    setTimeout(say, 1000);
+
+    // 输出变成 0 -> 1 -> 2 -> 3 -> 4 -> 5
+    const tasks = [];
+    for (var i = 0; i < 5; i++) {   // 这里 i 的声明不能改成 let，如果要改该怎么做？
+        ((j) => {
+            tasks.push(new Promise((resolve) => {
+                setTimeout(() => {
+                    console.log(j);
+                    resolve();  // 这里一定要 resolve，否则代码不会按预期 work
+                }, 1000 * j);   // 定时器的超时时间逐步增加
+            }));
+        })(i);
+    }
+    let pro0 = new Promise((resolve, reject) => { resolve("aa")});
+    let pro1 = new Promise((resolve, reject) => { resolve("bb")});
+    let pro2 = new Promise((resolve, reject) => { reject("cc")});
+    let pro3 = Promise.all([pro0, pro1, pro2]); // 有一个reject时返回reject
+    let pro4 = Promise.race([pro0, pro1, pro2]); //按顺序逐个返回，不管成功失败
+    pro3.then(() => {
+        console.log("resolve");
+    }).catch(() => {
+        console.log("reject");
+    });
+    Promise.all(tasks).then(() => {
+        setTimeout(() => {
+            console.log(i);
+        }, 1000);   // 注意这里只需要把超时设置为 1 秒
+    });
+
+    //es7 async/await
+    const sleep = (timeountMS) => new Promise((resolve) => {
+        setTimeout(resolve, timeountMS);
+    });
+
+    (async () => {  // 声明即执行的 async 函数表达式
+        for (var i = 0; i < 5; i++) {
+            var s = await sleep(1000);
+            console.log(i);
+        }
+
+        var ss = await sleep(1000);
+        console.log(i);
+    })();
 }
 function letOrVar() {
     //ES6 明确规定，如果区块中存在let和const命令，这个区块对这些命令声明的变量，从一开始就形成了封闭作用域。凡是在声明之前就使用这些变量，就会报错。
@@ -796,6 +869,7 @@ function digui() { // 递归获取JSON子节点
         friends: {
             one: {
                 name: "sean_fri1",
+
                 age: 25
             },
             two: {
@@ -1125,6 +1199,18 @@ function css() {//Edge Reflow
         //rem - 相对于<html>元素的font-size大小计算，rem使得统一改变页面上的所有标题和段落文本大小变得非常容易。
         //px - 像素单位是最精确的，但是不适用于自适应的设计。px单位是可靠的，并且易于理解，我们可以精细的控制元素的大小和移动到1px。
     }
+    let buju = {
+        //1.单列布局 上 中(width 80%; margin: auto) 下
+        //2.两栏布局 左(float: left; height:100% width: 200px) 右 width: calc(100% - 200px);
+        // 2.OR 左(display: inline-block height:100% width: 200px) 右(display: inline-block width: calc(100% - 200px);) 带来的问题
+        // 2.问题：display: inline-* 会把代码中的空格和回车算进去会有间距。解决1：使用margin负值 margin-right: -3px; 2.父元素使用font-size:0 子元素自己的字体 3.父元素letter-spacing(设置字符间距):-3px 子元素0
+        // 2.display: grid;grid-template-columns: auto 1fr; grid-gap: 20px; grid布局
+        // 3.采用flex实现，左侧固定大小，右侧设置flex:1,即可实现自适应
+        //4.圣杯布局 middle写在最前面，这样网页在载入时，就会优先加载 通过给 container 左右固定的padding来预留出left和right的空间
+        // 内部元素都是左浮动的，主要区域宽度100%; 左侧区域通过margin-left:-100%;使它浮动到左方 然后更具自身定位 left：-300px;将之移动到父容器的padding中右侧同理，只不过只需要margin自己本身的宽度。
+        // 使用margin-left的负百分比的时候盒子其实是相对上一个浮动的盒子 结合float position: relative; left: -300px; margin-left: -100%;
+        // 5.粘连布局 超出可视窗口底部往下 小于可视窗口 底部固定
+    }
 }
 function cssCenter() {
     //行内元素水平居中：1.设置父元素（父元素必须是块级元素）text-align: center; 2.设置子元素display: table; margin: auto;
@@ -1137,6 +1223,7 @@ function cssCenter() {
 
     //单行内元素垂直居中：1.设置单行行内元素的"行高等于盒子的高"即可；
         //注：1.line-height = 基线和基线之间的距离 vertical-align:设置文本对基线的对齐方式
+        // 2.line-height 的值为数字时，表示的相对于 font-size 的倍数
     //多行内元素垂直居中：1.给父元素设置 display: table-cell; vertical-align: middle;
         //注：1.table-cell元素会作为一个表格单元格显示，所以可设置vertical-align
 
@@ -1149,7 +1236,7 @@ function cssCenter() {
         //3.使用flexbox布局实现: display: flex; justify-content: center;align-items: center;（行块均可以）
         //4.其它结合方案：1.父元素（父元素必须是块级元素）text-align: center; 2.给父元素设置 display: table-cell; vertical-align: middle;（父元素宽高要确定）（行块均可以）
         //5.其它结合方案：1.父元素margin: 0 auto;确定宽度 2.子元素position: absolute; top: 50%; transform: translateY(-50%);（行块均可以）
-
+        //6 1.父元素display: flex;   2.子元素margin: auto;
 }
 function carousel() {
     //核心实现：移动ul的left来确定图片的显示
@@ -1712,28 +1799,239 @@ function tHistory() {
     // replaceState()类似于pushState()，只是将当前页面状态替换为新的状态
     // onpopstate事件
 }
-(function() {
+function kuayu() {
+    //跨域解决方案：
+    // 一JSONP 动态添加script标签 传递回调函数名 后端返回一个函数字符串（callbackFunction(["customername1","customername2"])）前端调用函数便可
+    // get post返回结果被浏览器拦截 使用<form target=iframe>
+    var s = document.createElement('script');
+    s.src = 'https://www.runoob.com/try/ajax/jsonp.php?jsoncallback=callbackFunction';
+    document.body.appendChild(s);
+    function callbackFunction(data) {
+        console.log(data);
+    }
+    // 二 CORS 跨域资源共享(CORS) 是一种机制，它使用额外的 HTTP 头来告诉浏览器  让运行在一个 origin (domain) 上的Web应用被准许访问来自不同源服务器上的指定的资源。
+    // chrome --disable-web-security --user-data-dir 这个方法会关闭整个浏览器的CORS机制，包含你浏览器正在访问的网站，要小心使用，非常不安全。
+    // CORS背后的基本思想是使用自定义的HTTP头部允许浏览器和服务器相互了解对方，从而决定请求或响应成功与否
+    // 对于客户端的开发者来说通常是透明的。因为浏览器已经负责实现了CORS最关键的部分；但是服务端的后台脚本则需要自己进行处理
+//     CORS可以分成两种：
+//
+// 简单请求
+//     复杂请求
+//     一个简单的请求大致如下：
+//
+// HTTP方法是下列之一
+//     HEAD
+//     GET
+//     POST
+//     HTTP头包含
+//     Accept
+//     Accept-Language
+//     Content-Language
+//     Last-Event-ID
+//     Content-Type，但仅能是下列之一
+//     application/x-www-form-urlencoded
+//     multipart/form-data
+//     text/plain
+//     任何一个不满足上述要求的请求，即被认为是复杂请求。一个复杂请求不仅有包含通信内容的请求，同时也包含预请求（preflight request）。
+//     预请求实际上是对服务端的一种权限请求，只有当预请求成功返回，实际请求才开始执行。
 
+    // 三 图片ping 使用图片ping跨域只能发送get请求，并且不能访问响应的文本，只能监听是否响应而已，可以用来追踪广告点击。
+    var img=new Image();
+    img.src='//www.jb51.net';
+    img.onerror=function(){
+        alert('error');
+    }
+    img.onload=function(){
+        alert('success');
+    }
+    // 四 iframe的src属性由外域转向本地域，跨域数据即由iframe的window.name从外域传递到本地域。这个就巧妙地绕过了浏览器的跨域访问限制，但同时它又是安全操作。
+    // 数据页面会把数据附加到这个iframe的window.name上
+    var iframe = document.getElementById('iframe');
+    var state = true;
+    iframe.onload = function(){
+        if(state === true){
+            iframe.src = 'http://localhost:63342/wang_weblite/src/static/test/test.html?_ijt=rmdkt3b88v0p797opbkigi25rc';
+            state = false;
+        }else if(state === false){
+            state = null
+            var data = iframe.contentWindow.name
+            console.log(data)
+        }
+    };
+
+    // 五postMessage允许不同源之间的脚本进行通信，用法 otherWindow.postMessage(message, targetOrigin);
+    // otherWindow 引用窗口 iframe.contentwindow 或 window.open返回的对象
+    // message 为要传递的数据
+    // targetOrigin 为目标源
+    var iframe = document.getElementById('iframe');
+    iframe.onload = function(){
+        var popup = iframe.contentWindow;
+        popup.postMessage("hello", "http://127.0.0.1:5000");
+    };
+    iframe.src = 'http://127.0.0.1:5000/lab/postMessage';
+    // 监听返回的postMessage
+    window.addEventListener("message", function(event){
+        if (event.origin !== "http://127.0.0.1:5000") return;
+        console.log(event.data)
+    }, false)
+}
+function storage() {
+    // ocalStorage大小限制在500万字符左右，各个浏览器不一致
+    // localStorage在隐私模式下不可读取
+    // localStorage本质是在读写文件，数据多的话会比较卡（firefox会一次性将数据导入内存，想想就觉得吓人啊）
+    // localStorage不能被爬虫爬取，不要用它完全取代URL传参（localstorage无法实现seo优化）
+    function isLocalStorage() { //隐私模式
+        var testKey = 'test',
+            storage = window.localStorage;
+        try {
+            storage.setItem(testKey, 'testValue');
+            storage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+}
+function dom() {
+    //1.DOMContentLoaded：当初始的 HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，而无需等待样式表、图像和子框架的完成加载。
+    //注意：DOMContentLoaded 事件必须等待其所属script之前的样式表加载解析完成才会触发。
+}
+
+//设计模式
+function danli() {
+    var Singleton = function(name) {
+        this.name = name;
+        this.instance  = null;
+    };
+    Singleton.getInstance = function(name) {
+        if(!this.instance) {
+            this.instance = new Singleton(name)
+        }
+        return this.instance;
+    };
+    var s1 = Singleton.getInstance('aa');
+    var s2 = Singleton.getInstance('bb');
+}
+(function() {
+    window.pagehide;
+    window.beforeunload;
+    window.unload;
+
+    document.visibilityState;
+    // hidden：页面彻底不可见。
+    // visible：页面至少一部分可见。
+    // prerender：页面即将或正在渲染，处于不可见状态。
+    document.hidden; // 返回一个布尔值，表示当前页面是否可见。
+    //visibilitychange 事件  只要document.visibilityState属性发生变化，就会触发visibilitychange事件
+    //监听这个事件（通过document.addEventListener()方法或document.onvisibilitychange属性）
+    document.addEventListener('visibilitychange', function () {
+        // 用户离开了当前页面
+        if (document.visibilityState === 'hidden') {
+            document.title = '页面不可见';
+        }
+
+        // 用户打开或回到页面
+        if (document.visibilityState === 'visible') {
+            document.title = '页面可见';
+        }
+    });
+
+    document.anchors; //[] 锚的数量a标签
+    document.lastModified; //文档最后一次修改时间
+    document.links; //链接数目
 })();
 
+// var el = document.getElementById("tid");
+// el.onclick = function() {
+//     console.log(window.history);
+//     // window.history.pushState({page: 1}, null, 'test111.html');
+//     window.location.hash = '123';
+//     console.log(window.location.hash);
+// };
+// window.onpopstate = function() {
+//     console.log("onpopstate");
+// };
 
-var el = document.getElementById("tid");
-el.onclick = function() {
-    console.log(window.history);
-    // window.history.pushState({page: 1}, null, 'test111.html');
-    window.location.hash = '123';
-    console.log(window.location.hash);
-};
-window.onpopstate = function() {
-    console.log("onpopstate");
+window.onload = function() {
+    createDom(); //异步请求取得大量数据 生成节点
+    operateDom(); //遍历操作createDom生成的节点
 };
 
-function jsonp() {
-    var s = document.createElement('script');
-    s.src = './test.json';
-    document.body.appendChild(s);
+function createDom() {
+    let el = document.getElementById("cd");
+    for(let i = 0; i < 100; i++) {
+        let nd = document.createElement("p");
+        nd.innerText = "nd：" + i;
+        nd.setAttribute("id", i.toString());
+        el.appendChild(nd);
+    }
+
 }
-jsonp();
+function operateDom() {
+    //问题出现了：页面显示的并不是我们想要的效果
+    //由于生成的dom节点附加到页面dom树的时候存在着延迟，所以在createDom里面数据量比较大、生成dom节点比较多的时候，这种时间差会很大（对机器而言）
+    let el = document.getElementById("99");
+    console.log(el);
+}
+
+/**
+ * 实现subType类对工厂类中的superType类型的抽象类的继承
+ * @param subType 要继承的类
+ * @param superType 工厂类中的抽象类type
+ */
+const VehicleFactory = function(subType, superType) {
+    if (typeof VehicleFactory[superType] === 'function') {
+        function F() {
+            this.type = '车辆'
+        }
+        F.prototype = new VehicleFactory[superType]();
+        subType.constructor = subType;
+        subType.prototype = new F();             // 因为子类subType不仅需要继承superType对应的类的原型方法，还要继承其对象属性
+    } else throw new Error('不存在该抽象类')
+};
+VehicleFactory.Car = function() {
+    this.type = 'car'
+};
+VehicleFactory.Car.prototype = {
+    getPrice: function() {
+        return new Error('抽象方法不可使用')
+    },
+    getSpeed: function() {
+        return new Error('抽象方法不可使用')
+    }
+};
+
+const BMW = function(price, speed) {
+    this.price = price;
+    this.speed = speed;
+};
+VehicleFactory(BMW, 'Car');      // 继承Car抽象类
+BMW.prototype.getPrice = function() {        // 覆写getPrice方法
+    console.log(`BWM price is ${this.price}`)
+};
+BMW.prototype.getSpeed = function() {
+    console.log(`BWM speed is ${this.speed}`)
+};
+
+const baomai5 = new BMW(30, 99);
+baomai5.getPrice();                             // BWM price is 30
+baomai5 instanceof VehicleFactory.Car;       // true
+
+const AnimalFactory = function(subFun, superFun) {
+    if(typeof AnimalFactory[superFun] === "function") {
+        function F() {
+            this.type = "车辆";
+        }
+        F.prototype = new AnimalFactory[superFun]();
+        superFun.constructor = subFun;
+        superFun.prototype = new F();
+    } else throw Error("不存在该抽象类")
+};
+
+function download_click() {
+    window.open('https://files.ktsport.cn/bike_trace/860344048808142/2019-10-23.log');
+}
+
 //堆栈是一种按序排列的数据结构，只能在一端(称为栈顶(top))对数据项进行插入和删除
 // 1.请你谈谈Cookie
 // Cookie虽然在持久保存客户端数据提供了方便 分担了服务起存储的负担 但是还有许多局限性   持久保存客户端数据
@@ -2136,3 +2434,8 @@ jsonp();
 // 有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）
 // 	resolve()：操作成功  reject()：操作失败
 // Promise.race方法同样是将多个 Promise 实例，包装成一个新的 Promise 实例。
+
+
+//react单向数据绑定理解：单向数据量组件props是父级往下传递，你不能向上去修改父组件的数据，并且也不能在自身组件中修改props的值。（props是只读的）
+//React不算mvvm，虽然可以实现双向绑定，在React中实现双向绑定通过state属性，但如果将state绑定到视图中时，直接修改state属性是不可的，
+// 需要通过调用setState去触发更新视图，反过来视图如果要更新也需要监听视图变化 然后调用setState去同步state状态。标准MVVM应该属于给视图绑定数据后，操作数据即是更新视图

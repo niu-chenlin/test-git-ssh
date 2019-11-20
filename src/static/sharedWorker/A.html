@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button>点击</button>
+    <div><span>点了 <span class="time">-</span> 下</span></div>
+</body>
+<script>
+    if (typeof Worker === "undefined") {
+        alert('当前浏览器不支持webworker');
+    } else {
+        //tab共享数据实现：1.A postMessage(数据) 2.sharedWorker.js存储数据（中间类）3.B postMessage(数据)并通过onmessage获得数据
+        //共享线程 Shared Worker 共享worker可以被多个脚本使用——即使这些脚本正在被不同的window、iframe或者worker访问
+        //注意：如果共享worker可以被多个浏览上下文调用，所有这些浏览上下文必须属于同源（相同的协议，主机和端口号）。
+        let worker = new SharedWorker('sharedWorker.js');
+        window.worker = worker;
+        var i = 100;
+        document.querySelector('button').onclick = function() {
+            window.worker.port.postMessage('发送信息给worker ' + i++);
+            //与一个共享worker通信必须通过端口对象 一个确切的打开的端口供脚本与worker通信（在专用worker中这一部分是隐式进行的）。
+            //在传递消息之前，端口连接必须被显式的打开，打开方式是使用onmessage事件处理函数或者start()方法。
+            //start()方法的调用只在一种情况下需要，那就是消息事件被addEventListener()方法使用。
+            //当一个端口连接被创建时(在父级线程中，设置onmessage事件处理函数，或者显式调用start()方法时) 使用onconnect事件处理函数来执行代码
+            console.log('Message posted to worker');
+        };
+        let timeDom = document.querySelector('.time');
+        worker.port.onmessage = function(e) {
+            console.log('Message received from worker');
+            console.log(e.data);
+            timeDom.innerHTML = e.data
+        }
+    }
+</script>
+</html>

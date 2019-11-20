@@ -147,3 +147,60 @@ h6 {
   }
 }
 
+
+.flex-container {
+  display: -webkit-flex;
+  display: flex;
+  width: 400px;
+  height: 250px;
+  background-color: lightgrey;
+}
+
+.flex-item {
+  background-color: cornflowerblue;
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+}
+
+.main {
+  width: 1000px;
+  height: 500px;
+  margin: auto;
+  background: #ededed;
+  .container {
+    .head {
+
+    }
+    .content {
+
+    }
+    .footer {
+
+    }
+  }
+}
+@keyframes test {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.icon {
+  width: 10px!important;
+  height: 10px;
+  animation: test 3s infinite;
+}
+
+.chunk {
+  width: 500px;
+  height: 50px;
+  background-color: aliceblue;
+  .con {
+    width: 100px;
+    background-color: antiquewhite;
+  }
+}
+

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    var worker = new Worker('worker.js'); //专用线程 Dedicated Worker 专用worker仅仅能被生成它的脚本所使用
+    worker.onmessage = function(event) {
+        console.log("Result:" + event.data);
+    };
+    worker.onerror = function(error) {
+        console.log("Error:" + error.message);
+    };
+    worker.postMessage(4011);
+    worker.terminate(); //终止worker
+</script>
+</html>

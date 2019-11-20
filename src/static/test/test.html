@@ -1,9 +1,165 @@
-<html>
+<!DOCTYPE html>
+<html manifest="">
 <head>
     <meta charset="UTF-8">
     <title>实例</title>
     <link rel="stylesheet" href="test.css">
+    <style type="text/css">
+        #wj {
+            width: 0;
+            height: 0;
+            color: aliceblue;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 70px solid;
+            transform: rotate(35deg);
+            margin: 50px 0;
+        }
+        #wj:before {
+            content: '';
+            width: 0;
+            height: 0;
+            color: aliceblue;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 70px solid;
+            transform: rotate(-70deg);
+            position: absolute;
+            bottom: -80px;
+            left: -115px;
+        }
+        #wj:after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 80px solid;
+            color: aliceblue;
+            position: absolute;
+            top: -54px;
+            left: -76px;
+            transform: rotate(-35deg);
+        }
 
+        #lj {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 100px solid red;
+            position: relative;
+        }
+        #lj:after {
+            width: 0;
+            height: 0;
+            border-top: 100px solid red;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            position: absolute;
+            content: "";
+            top: 30px;
+            left: -50px;
+        }
+
+        #wb {
+            width: 54px;
+            position: relative;
+            border-width: 50px 18px 0;
+            border-style: solid;
+            border-color: aliceblue transparent;
+        }
+        #wb:after {
+            content: "";
+            height: 0;
+            width: 0;
+            position: absolute;
+            top: -85px;
+            left: -18px;
+            border-width: 0 45px 35px;
+            border-style: solid;
+            border-color: transparent transparent aliceblue;
+        }
+
+        #ax {
+            position: relative;
+            width: 100px;
+            height: 90px;
+        }
+        #ax:before{
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 80px;
+            background: aliceblue;
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+        }
+        #ax:after {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 80px;
+            background: aliceblue;
+            border-radius: 50px 50px 0 0;
+            transform: rotate(45deg);
+        }
+
+        #t8 {
+            width: 212px;
+            height: 100px;
+            position: relative;
+        }
+        #t8:before{
+            width: 60px;
+            height: 60px;
+            top: 0;
+            left: 0;
+            border: 20px solid aliceblue;
+            position: absolute;
+            content: "";
+            border-radius: 50px 50px 0 50px;
+            -webkit-border-radius:50px 50px 0 50px;
+            -moz-border-radius:50px 50px 0 50px;
+            transform:rotate(-45deg);
+            -webkit-transform:rotate(-45deg);
+            -ms-transform:rotate(-45deg);
+            -moz-transform:rotate(-45deg);
+            -o-transform:rotate(-45deg);
+        }
+        #t8:after {
+            left: auto;
+            right: 0;
+            border-radius: 50px 50px 50px 0;
+            -webkit-border-radius:50px 50px 50px 0;
+            -moz-border-radius:50px 50px 50px 0;
+            transform:rotate(45deg);
+            -webkit-transform:rotate(45deg);
+            -moz-transform:rotate(45deg);
+            -ms-transform:rotate(45deg);
+            -o-transform:rotate(45deg);
+        }
+
+        #zs {
+            width: 50px;
+            height: 0;
+            border-style: solid;
+            border-color: transparent transparent aliceblue transparent;
+            border-width: 0 25px 25px 25px;
+            position: relative;margin: 20px 0 50px 0;
+        }
+        #zs:after {
+            width: 0;
+            height: 0;
+            top: 25px;
+            left: -25px;
+            border-style: solid;
+            border-color: aliceblue transparent transparent transparent;
+            border-width: 70px 50px 0 50px;
+            position: absolute;
+            content: "";
+        }
+    </style>
 </head>
     <body>
         <!--<div class="box" id="box">-->
@@ -30,13 +186,100 @@
         <!--<input type="button" value="看不清换一张" onclick="createCode(4)"/>-->
         <!--<input type="text" value="验证码"/>-->
         <!--<input type="button" value="确认" onclick="validateCode()"/>-->
-        <ul>
-            <li>1</li>
-            <li>2</li>
-        </ul>
-        <div id="tid">
-            this is div
+        <!--<ul>-->
+            <!--<li>1</li>-->
+            <!--<li>2</li>-->
+        <!--</ul>-->
+        <!--<div id="tid">-->
+            <!--this is div-->
+        <!--</div>-->
+        <!--<iframe id="iframe" src="https://www.runoob.com/try/ajax/jsonp.php?jsoncallback=callbackFunction">-->
+
+        <!--</iframe>-->
+        <!--<div class="flex-container">-->
+            <!--<div class="flex-item">flex item 1</div>-->
+            <!--<div class="flex-item">flex item 2</div>-->
+            <!--<div class="flex-item">flex item 3</div>-->
+
+            <!--<div class="flex-item">flex item 4</div>-->
+            <!--<div class="flex-item">flex item 5</div>-->
+            <!--<div class="flex-item">flex item 6</div>-->
+        <!--</div>-->
+        <!--<div class="main">-->
+            <!--单列布局 上 中(width 80%; margin: auto) 下-->
+            <!--<div class="container">-->
+                <!--<header class="head">this is head</header>-->
+                <!--<div class="content">this is content</div>-->
+                <!--<footer class="footer">this is footer</footer>-->
+            <!--</div>-->
+            <!-- 两栏布局 左(float: left; height:100%) 右 -->
+            <!--<div class="nav">nav</div>-->
+            <!--<div class="content">content</div>-->
+            <!-- 圣杯布局 性能：为了让content内容区域优先加载 middle写在最前面，这样网页在载入时，就会优先加载-->
+            <!--<div class="container">-->
+                <!--<div class="middle">m</div>-->
+                <!--<div class="left">l</div>-->
+                <!--<div class="right">r</div>-->
+            <!--</div>-->
+            <!-- 双飞翼布局 双飞翼布局和圣杯差不多，主要是将padding换成了margin而且只需要包裹middle即可，-->
+            <!--<div class="container">-->
+                <!--<div class="middle">m</div>-->
+            <!--</div>-->
+            <!--<div class="left">l</div>-->
+            <!--<div class="right">r</div>-->
+            <!-- 粘连布局 超出可视窗口底部往下 小于可视窗口 底部固定-->
+            <!--<div class="wrap">-->
+                <!--<div class="main">-->
+                    <!--main<br/>-->
+                    <!--main<br/>-->
+                    <!--main<br/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="footer">-->
+                <!--footer-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="chunk">-->
+           <!--<div class="con">-->
+               <!--默认情况下，-->
+           <!--</div>-->
+            <!--<div class="con">-->
+                <!--弹性盒容器中的条目会尽量占满容器在主轴方向上的一行。-->
+            <!--</div>-->
+            <!--<div class="con">-->
+                <!--当容器的主轴尺寸小于其所有条目总的主轴尺寸时，-->
+            <!--</div>-->
+            <!--<div class="con">-->
+                <!--会出现条目之间互相重叠或超出容器范围 的现象。-->
+            <!--</div>-->
+            <!--<div class="con">-->
+                <!--CSS 属性"flex-wrap"用来声明当容器中条目的尺寸超过主轴尺寸时应采取的行为。-->
+            <!--</div>-->
+            <!--<div class="con">-->
+                <!--"flex-wrap"属性的可选值及其含义如列表2所示。-->
+            <!--</div>-->
+        <!--</div>-->
+        <div>
+            <a href="../files/test.csv" download>下载</a>
+            <button onclick="download_click()">下载1</button>
+            <form action="../files/test.csv">
+                <button type="submit">submit</button>
+            </form>
         </div>
+        <!--<div id="wj"></div>-->
+        <!--<div id="lj"></div>-->
+        <!--<div id="wb"></div>-->
+        <!--<div id="ax"></div>-->
+        <!--<div id="t8"></div>-->
+        <!--<div id="zs"></div>-->
+        <!--<img src="../images/team/3.jpg" width="300" height="200" border="0" usemap="#Map" />-->
+        <!--<map name="Map" id="Map">-->
+            <!--<area shape="circle" coords="153,46,30" href="www.baidu.com" target="_blank" />-->
+        <!--</map>-->
+        <!--实现不使用 border 画出1px高的线，在不同浏览器的标准模式与怪异模式下都能保持一致的效果。-->
+        <!--<div style="height:1px;overflow:hidden;background:red"></div>-->
+        <script async src="load.js"></script>
+        <div id="cd"></div>
         <script src="test.js"></script>
     </body>
 </html>
