@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>实例</title>
-    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="test.css" media="print">
     <style type="text/css">
         #wj {
             width: 0;
@@ -159,6 +159,89 @@
             position: absolute;
             content: "";
         }
+
+
+        html,body{
+            margin: 0;
+            padding: 0;
+        }
+        #wrap{
+            width: 100%;
+            overflow: hidden;
+            background: #ccc;
+        }
+        #main{
+            width: 100%;
+            background: #ccc;
+            position: relative;
+        }
+        .page{
+            width:100%;
+            margin:0;
+        }
+        #page1{
+            background:aliceblue;
+        }
+        #page2{
+            background:antiquewhite;
+        }
+        #page3{
+            background:azure;
+        }
+        #page4{
+            background:#A5A5A5;
+        }
+
+        .box {
+            height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .flowImage {
+            position: relative;
+            height: 789px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            z-index: 1;
+            /*//划重点！！！*/
+            background-attachment: fixed;
+        }
+
+        .flowImage>p {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            color: #fff;
+            font-size: 30px;
+            transform: translate(-10%, -50%);
+        }
+
+        .bg1 {
+            background-image: url(../images/head/1.jpg);
+        }
+
+        .bg2:nth-child(2) {
+            background-image: url(../images/head/2.jpg);
+        }
+
+        .bg3:nth-child(3) {
+            background-image: url(../images/head/3.jpg);
+        }
+
+        .bg4:nth-child(4) {
+            background-image: url(../images/head/1.jpg);
+        }
+
+        .bg5:nth-child(5) {
+            background-image: url(../images/head/2.jpg);
+        }
+
+        .bg6:nth-child(6) {
+            background-image: url(../images/head/3.jpg);
+        }
     </style>
 </head>
     <body>
@@ -259,13 +342,13 @@
                 <!--"flex-wrap"属性的可选值及其含义如列表2所示。-->
             <!--</div>-->
         <!--</div>-->
-        <div>
-            <a href="../files/test.csv" download>下载</a>
-            <button onclick="download_click()">下载1</button>
-            <form action="../files/test.csv">
-                <button type="submit">submit</button>
-            </form>
-        </div>
+        <!--<div>-->
+            <!--<a href="../files/test.csv" download>下载</a>-->
+            <!--<button onclick="download_click()">下载1</button>-->
+            <!--<form action="../files/test.csv">-->
+                <!--<button type="submit">submit</button>-->
+            <!--</form>-->
+        <!--</div>-->
         <!--<div id="wj"></div>-->
         <!--<div id="lj"></div>-->
         <!--<div id="wb"></div>-->
@@ -278,8 +361,86 @@
         <!--</map>-->
         <!--实现不使用 border 画出1px高的线，在不同浏览器的标准模式与怪异模式下都能保持一致的效果。-->
         <!--<div style="height:1px;overflow:hidden;background:red"></div>-->
-        <script async src="load.js"></script>
-        <div id="cd"></div>
+        <!--<script async src="load.js"></script>-->
+        <!--抽离样式模块 “模块”指的是页面元素 例如网站通用按钮，通用选项卡，通用小图标，或是页面的一些固定框架结构等，即页面元素的模块化。-->
+
+        <!--<div id="wrap">-->
+            <!--<div id="main">-->
+                <!--<div id="page1" class="page"></div>-->
+                <!--<div id="page2" class="page"></div>-->
+                <!--<div id="page3" class="page"></div>-->
+                <!--<div id="page4" class="page"></div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="box">-->
+            <!--<div class="flowImage fixed-bg bg1">-->
+                <!--<p>-->
+                    <!--这个西红柿死了吗<br>-->
+                    <!--可是它的颜色<br>-->
+                    <!--还像鲜花一样奔放-->
+                <!--</p>-->
+            <!--</div>-->
+            <!--<div class="flowImage fixed-bg bg2">-->
+                <!--<p>为了跳到天上<br>-->
+                    <!--月亮先爬到树上。-->
+                <!--</p>-->
+            <!--</div>-->
+            <!--<div class="flowImage fixed-bg bg3">-->
+                <!--<p>-->
+                    <!--晚上<br>-->
+                    <!--我打着手电筒散步<br>-->
+                    <!--累了就拿它当拐杖<br>-->
+                    <!--我拄着一束光-->
+                <!--</p>-->
+            <!--</div>-->
+            <!--<div class="flowImage fixed-bg bg4">-->
+                <!--<p>-->
+                    <!--我是在摸一颗星星<br>-->
+                    <!--因为地球<br>-->
+                    <!--也是一颗星星-->
+                <!--</p>-->
+            <!--</div>-->
+            <!--<div class="flowImage fixed-bg bg5">-->
+                <!--<p>-->
+                    <!--我在家等爸爸妈妈<br>-->
+                    <!--我饿了<br>-->
+                    <!--这时飞来一只金龟子<br>-->
+                    <!--可能金龟子也饿了-->
+                <!--</p>-->
+            <!--</div>-->
+            <!--<div class="flowImage fixed-bg bg6">-->
+                <!--<p>-->
+                    <!--每当见到加油站<br>-->
+                    <!--我就在心里大声地喊<br>-->
+                    <!--加油加油加油<br>-->
+                    <!--也不知为了谁-->
+                <!--</p>-->
+            <!--</div>-->
+        <!--</div>-->
+
         <script src="test.js"></script>
+
+        <script type="text/javascript">
+            //该代码表示​​等待整个文档加载，然后加载外部文件“ defer.js”。
+            // 在加载文档之前，此代码不会加载指定的外部文件。因此，您不应该将任何javascript放在页面正确加载所需的地方。
+            // 您应该将javascript分成两组。一个组是页面需要加载的javascript，第二个组是页面加载后正在执行任务的javascript（比如查找单击事件或其他内容）。
+            // 可以等到页面加载之后的javascript应该全部放入上面调用的一个外部文件中。
+            // 例如，在这个页面上，我使用上面的文件来延迟-谷歌分析，Viglink（我如何赚钱），和谷歌加徽章，显示在我的页脚（我的社交媒体）。
+            // 我没有理由在初始页面加载时加载这些文件，因为加载上述折叠内容不需要任何文件。你的页面上可能有相同类型的内容。
+            // 你是否让你的用户在显示你的内容之前等待加载这些内容？为什么其他方法不起作用？
+            // function downloadJSAtOnload() {
+            //     var element = document.createElement("script");
+            //     element.src = "defer.js";
+            //     document.body.appendChild(element);
+            // }
+            // if (window.addEventListener)
+            //     window.addEventListener("load", downloadJSAtOnload, false);
+            // else if (window.attachEvent)
+            //     window.attachEvent("onload", downloadJSAtOnload);
+            // else window.onload = downloadJSAtOnload;
+
+
+        </script>
     </body>
 </html>

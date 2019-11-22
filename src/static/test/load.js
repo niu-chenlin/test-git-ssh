@@ -33,3 +33,44 @@ console.log(document.getElementById("cd")); //普通script会阻塞dom解析，�
 //扩展
 //DOM是Document Object Model（文档对象模型）的缩写。它是为HTML和XML定义的一个编程接口，提供了文档的结构化表示（节点树状结构），
 // 同时也规定了使用脚本编程语言（例如JavaScript）应该如何访问以及操作DOM。
+//这样一个节点树状结构是由不同的元素、父节点、子节点、兄弟节点等构成，它们彼此都有层级化的关系。
+
+//css并不会阻塞DOM树的解析。css加载会阻塞DOM树渲染。css加载会阻塞“后面”的js语句的执行。图像是不会阻塞渲染的
+//css的时候，可能会修改下面DOM节点的样式，如果css加载不阻塞DOM树渲染的话，那么当css加载完之后，DOM树可能又得重新重绘或者回流了，这就造成了一些没有必要的损耗。
+
+
+//非渲染阻塞的CSS
+// 唯一选项就是：在HTML中内联嵌入你的CSS。你可以把需要初始渲染的CSS，一般来讲就是第一屏的样式，直接放在 HEAD 里面的 <style></style> 中，然后剩下的CSS放在 </body> 之前。这样做可以完全避免CSS阻塞渲染。
+// 可以使用JavaScript来加载CSS，但是这样做会导致页面在加载结束时重绘，因此这个选项对于网站访问者来说不一定会很理想。
+
+// CSS建议
+// 正确的调用你的CSS文件 （译者注：原文如此，感觉应该是位置或时机？）
+// 使用 media queries (媒体查询) 来标记某些CSS为非阻塞资源 （译者注： 比如 <link href="other.css" rel="stylesheet" media="(min-width: 40em)"> 这样可以在其他屏幕尺寸加载时就不用加载这个css了）
+// 减少CSS的数量（尽可能放到一个CSS文件中）
+// Minify CSS文件（删除多余的空格、字符、注释等）
+// 尽可能的减少样式数量（译者注：和第三条不同，是减少样式数量，不是文件数量）
+
+//非渲染阻塞的JavaScript
+// 把脚本放在页面尾部 </body> 之前的位置
+// 使用async或defer指令来避免阻塞渲染
+
+//对于JavaScript的另外3条建议是
+// 减少JavaScript的数量（尽量整合成一个JS文件）
+// Minify（最小化）JavaScript
+// 如果JavaScript很小的话，可以内联嵌入
+
+
+// 解析HTML结构；
+// 加载外部脚本和样式表文件；
+// 解析并执行脚本代码；
+// 构造HTML DOM模型；
+// 加载图片等外部文件；
+// 页面加载完毕；
+
+// 对于竖直方向的margin和padding，参照父元素的宽度。
+// 对于水平方向的margin和padding，也是参照父元素的宽度。
+
+// 响应式设计的基本原理是通过媒体查询检测不同的设备屏幕尺寸做处理。页面头部必须有meta声明viewport：
+// <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no”>
+
+// background-attachment:作用是设置背景图像是否固定或者随着页面的其余部分滚动。

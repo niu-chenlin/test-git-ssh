@@ -1,0 +1,56 @@
+body {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+#box {
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  .flowImage {
+    position: relative;
+    height: 789px;
+    background-attachment: fixed;
+    p {
+      position: absolute;
+      margin: 0;
+      top: 50%;
+      left: 10%;
+      color: #fff;
+      font-size: 30px;
+      transform: translate(-10%, -50%);
+    }
+    &:nth-child(1) {
+      background-image: url(../images/parallaxScrolling/1.jpg);
+    }
+    &:nth-child(2) {
+      background-image: url(../images/parallaxScrolling/2.jpg);
+    }
+    &:nth-child(3) {
+      background-image: url(../images/parallaxScrolling/3.jpg);
+    }
+    &:nth-child(4) {
+      background-image: url(../images/parallaxScrolling/4.jpg);
+    }
+    &:nth-child(5) {
+      background-image: url(../images/parallaxScrolling/5.jpg);
+    }
+    &:nth-child(6) {
+      background-image: url(../images/parallaxScrolling/6.jpg);
+    }
+  }
+}
+
+#ww {
+  width: 200px;
+  height: 10px;
+  border: 1px solid;
+  margin: 200px 100px;
+  position: absolute;
+  padding: 20px;
+  overflow: auto;
+  #w {
+    width: 600px;
+    height: 600px;
+  }
+}

@@ -1939,6 +1939,18 @@ function danli() {
     document.anchors; //[] 锚的数量a标签
     document.lastModified; //文档最后一次修改时间
     document.links; //链接数目
+
+    var hidden, visibilityChange;
+    if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
+        hidden = "hidden";
+        visibilityChange = "visibilitychange";
+    } else if (typeof document.msHidden !== "undefined") {
+        hidden = "msHidden";
+        visibilityChange = "msvisibilitychange";
+    } else if (typeof document.webkitHidden !== "undefined") {
+        hidden = "webkitHidden";
+        visibilityChange = "webkitvisibilitychange";
+    }
 })();
 
 // var el = document.getElementById("tid");
@@ -1958,14 +1970,52 @@ window.onload = function() {
 };
 
 function createDom() {
-    let el = document.getElementById("cd");
-    for(let i = 0; i < 100; i++) {
-        let nd = document.createElement("p");
-        nd.innerText = "nd：" + i;
-        nd.setAttribute("id", i.toString());
-        el.appendChild(nd);
+    // let el = document.getElementById("cd");
+    // for(let i = 0; i < 100; i++) {
+    //     let nd = document.createElement("p");
+    //     nd.innerText = "nd：" + i;
+    //     nd.setAttribute("id", i.toString());
+    //     el.appendChild(nd);
+    // }
+    var pages = document.getElementsByClassName("page");
+    var wrap = document.getElementById("wrap");
+    var len = document.documentElement.clientHeight;
+    var main = document.getElementById("main");
+    wrap.style.height = len + "px";
+    for(var i=0; i<pages.length; i++){
+        pages[i].style.height = len + "px";
     }
-
+    if(navigator.userAgent.toLowerCase().indexOf("firefox") != -1){
+        document.addEventListener("DOMMouseScroll",scrollFun);
+    }else if(document.addEventListener){
+        document.addEventListener("mousewheel",scrollFun,false);
+    }else if(document.attachEvent){
+        document.attachEvent("onmousewheel",scrollFun);
+    }else{
+        document.onmousewheel = scrollFun;
+    }
+    var startTime = 0;
+    var endTime = 0;
+    var now = 0;
+    function scrollFun(e){
+        startTime = new Date().getTime();
+        var event = e || window.event;
+        var dir = event.detail || -event.wheelDelta;
+        //event.wheelDelta(正负120)(除了火狐),大多以负数向下，event.detail(正负3)(火狐浏览器特有)，以正数为向下
+        if(startTime - endTime > 1000) {
+            if(dir > 0 && now > -3*len) { //下
+                now -= len;
+                main.style.top = now +"px";
+                endTime = new Date().getTime();
+            } else if(dir < 0 && now < 0) { //上
+                now += len;
+                main.style.top = now +"px";
+                endTime = new Date().getTime();
+            }
+        } else {
+            event.preventDefault();
+        }
+    }
 }
 function operateDom() {
     //问题出现了：页面显示的并不是我们想要的效果

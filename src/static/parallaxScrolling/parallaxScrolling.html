@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="parallaxScrolling.css">
+</head>
+<body>
+    <div id="box">
+        <div class="flowImage fixed-bg bg1">
+            <p>
+                这个西红柿死了吗<br>
+                可是它的颜色<br>
+                还像鲜花一样奔放
+            </p>
+            <div id="ww">
+
+            </div>
+        </div>
+        <div class="flowImage fixed-bg bg2">
+            <p>
+                为了跳到天上<br>
+                月亮先爬到树上
+            </p>
+        </div>
+        <div class="flowImage fixed-bg bg3">
+            <p>
+                晚上<br>
+                我打着手电筒散步<br>
+                累了就拿它当拐杖<br>
+                我拄着一束光
+            </p>
+        </div>
+        <div class="flowImage fixed-bg bg4">
+            <p>
+                我是在摸一颗星星<br>
+                因为地球<br>
+                也是一颗星星
+            </p>
+        </div>
+        <div class="flowImage fixed-bg bg5">
+            <p>
+                我在家等爸爸妈妈<br>
+                我饿了<br>
+                这时飞来一只金龟子<br>
+                可能金龟子也饿了
+            </p>
+        </div>
+        <div class="flowImage fixed-bg bg6">
+            <p>
+                每当见到加油站<br>
+                我就在心里大声地喊<br>
+                加油加油加油<br>
+                也不知为了谁
+            </p>
+        </div>
+    </div>
+<script type="text/javascript">
+    function loadScript() {
+        let el = document.createElement("script");
+        el.src = "parallaxScrolling.js";
+        document.body.appendChild(el);
+    }
+    if(window.addEventListener) {
+        window.addEventListener("load", loadScript, false);
+    } else if(window.attachEvent) {
+        window.attachEvent("load", loadScript);
+    } else {
+        window.onload = loadScript();
+    }
+</script>
+</body>
+</html>
