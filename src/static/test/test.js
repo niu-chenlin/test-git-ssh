@@ -1951,6 +1951,7 @@ function danli() {
         hidden = "webkitHidden";
         visibilityChange = "webkitvisibilitychange";
     }
+    document.cookie = "example=1; expires=Mon, 11 Nov 2026 07:34:46 GMT; domain=www.test.com;path=/"; //设置cookie域名 防止占用宽带
 })();
 
 // var el = document.getElementById("tid");
@@ -2081,6 +2082,27 @@ const AnimalFactory = function(subFun, superFun) {
 function download_click() {
     window.open('https://files.ktsport.cn/bike_trace/860344048808142/2019-10-23.log');
 }
+
+//css解析选择器的匹配规则 SS选择器的读取顺序是从右向左 先找到span然后顺着往上找到class为“haha”的div再找到id为“molly”的元素
+//如果从左向右的顺序读取，在执行到左边的分支后发现没有相对应标签匹配，则会回溯到上一个节点再继续遍历，直到找到或者没有相匹配的标签才结束 消耗很多性能
+
+//style标签写在body后与body前有什么区别？
+//写在body标签前利于浏览器逐步渲染： resources downloading(资源加载)->CSSOM+DOM(生成CSSOM和DOM)->RenderTree(composite)(合成渲染树)->Layout(计算布局)->paint(绘制到页面)
+//写在body标签后：由于浏览器以逐行方式对html文档进行解析；当解析到写在尾部的样式表（外联或写在style标签）会导致浏览器停止之前的渲染，等待加载且解析样式表完成之后重新渲染；（造成回流 重绘或重新布局）
+//在windows的IE下可能会出现FOUC现象（即样式失效导致的页面闪烁问题）；
+// 1. 当render tree中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建。这就称为回流(其实我觉得叫重新布局更简单明了些)。每个页面至少需要一次回流，就是在页面第一次加载的时候。
+// 2. 当render tree中的一些元素需要更新属性，而这些属性只是影响元素的外观，风格，而不会影响布局的，比如background-color。则就叫称为重绘。
+// 注：从上面可以看出，回流必将引起重绘，而重绘不一定会引起回流。
+
+//Cookie 隔离? 通过设置cookie的domain值 cookie不可跨域使用
+//如域A为t1.study.com，域B为t2.study.com，那么在域A生产一个令域A和域B都能访问的cookie就要将该cookie的domain设置为.study.com；
+//如果要在域A生产一个令域A不能访问而域B能访问的cookie就要将该cookie的domain设置为t2.study.com。
+// 注意：一般在域名前是需要加一个"."的，如"domain=.study.com"。
+
+//有一个高度自适应的div，里面有两个div，一个高度100px，希望另一个填满剩下的高度
+//1. 父元素  box-sizing: border-box; padding: 100px 0 0;  2.A元素   margin: -100px 0 0;
+//1. 父元素  position: relative;  2.A元素   position: absolute; width: 100%;
+//1. 父元素  position: relative;  2.B元素   position: absolute; top: 100px; bottom: 0;
 
 //堆栈是一种按序排列的数据结构，只能在一端(称为栈顶(top))对数据项进行插入和删除
 // 1.请你谈谈Cookie

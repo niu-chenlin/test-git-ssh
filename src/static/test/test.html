@@ -242,6 +242,12 @@
         .bg6:nth-child(6) {
             background-image: url(../images/head/3.jpg);
         }
+
+        html,
+        body { height: 100%; padding: 0; margin: 0; }
+        .outer {width: 100px; height: 100%; padding: 100px 0 0; box-sizing: border-box ; }
+        .A { height: 100px; margin: -100px 0 0; background: azure; }
+        .B { height: 100%; background: bisque; }
     </style>
 </head>
     <body>
@@ -418,6 +424,11 @@
                 <!--</p>-->
             <!--</div>-->
         <!--</div>-->
+
+        <div class="outer">
+            <div class="A"></div>
+            <div class="B"></div>
+        </div>
 
         <script src="test.js"></script>
 

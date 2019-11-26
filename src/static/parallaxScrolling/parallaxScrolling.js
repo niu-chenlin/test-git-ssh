@@ -21,23 +21,38 @@ document.addEventListener(visibilityChange, function () {
 
 document.addEventListener("scroll", function() {
     let scrool = document.documentElement.scrollTop || document.body.scrollTop;
-
-
-    // 获取的是浏览器可见区域高度（网页的可视区域的高度）（不滚动的情况下）
-    let scrollTop = document.documentElement.scrollTop; //document.documentElement.clientHeight 获取窗口可视区域
-    // 元素顶端到可见区域（网页）顶端的距离
-    let htmlElementClientBottom = document.getElementById('ww').getBoundingClientRect().bottom; //元素
-    // 网页指定元素进入可视区域
-    if (scrollTop < htmlElementClientBottom) {
-        // TODO 执行你要做的操作
-        console.log("进");
+    if (revealOnScroll(document.getElementById('ww'))) {
+        document.getElementById('ww').style.animation = "dh 5s ease-in";
     } else {
-        console.log("出");
+        document.getElementById('ww').style.animation = "";
     }
-
-    // console.log(document.getElementById('ww').getBoundingClientRect().height);  //260
-    // console.log(document.documentElement.scrollTop);                      //4
-    // console.log(document.getElementById('box').getBoundingClientRect().height); //4734
-    //260 > 4 > 260-4734
-    //260 > 305 > 260-4734
 }, false);
+
+
+
+function revealOnScroll(el) {
+    var win_height_padded = window.innerHeight * 1.1; //窗口尺寸
+    var scrolled = document.documentElement.scrollTop; //获取滚动条位置
+    var rect = el.getBoundingClientRect();
+    var offsetTop = el.getBoundingClientRect().top; //offsetTop：获取元素XY坐标 坐标值相对于父元素的坐标而不是文档坐标 getBoundingClientRect：
+    var offsetBottom = el.getBoundingClientRect().bottom; //bottom 绝对X坐标
+    if (win_height_padded > offsetTop && offsetBottom > 0) {//窗口尺寸+滚动条位置 > 元素绝对Y坐标  + scrolled
+        return true;
+    }
+    // if (rect.top > 0 && rect.bottom < win_height_padded) {
+    //     // rect.top：元素top坐标越往下越小 到负数看不到了；
+    //     // rect.bottom：元素bottom坐标越往下越小 到负数看不到了；
+    //     return true;
+    // }
+}
+
+function isElementInViewport(el) {
+    //获取元素是否在可视区域
+    var rect = el.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && //bottom 绝对X坐 <= 标窗口尺寸
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
