@@ -1,0 +1,130 @@
+@base: red;
+
+.box-shadow(@style, @c) when (iscolor(@c)) {
+  -webkit-box-shadow: @style @c;
+  box-shadow: @style @c;
+}
+.box-shadow(@style, @alpha: 50%) when (isnumber(@alpha)) {
+  .box-shadow(@style, rgba(0,0,0,@alpha));
+}
+.box {
+  color: saturate(@base, 5%);
+  border-color: lighten(@base, 30%);
+  div { .box-shadow(0 0 5px, 30%) }
+}
+
+.mixin(1) {a: 5};
+.mixin(2) {b: 10};
+.mixin(3) {c: 15};
+.mixin(@a) when (default()) {d: @a}
+
+.t-default(@value) when (ispixel(@value)) {width: @value} //ispixel 单位是否是px
+.t-default(@value) when not(default())    {padding: (@value / 5)} //default() 默认都走这个函数 when not：不是默认函数（存在一个至少一个与.mixin()call 匹配的mixin定义时才匹配）
+
+.m(@x) when (default()), not(default())    {always: @x} //允许default()在相同保护条件下或在具有相同名称的mixins的不同条件下进行多个调用
+.m(@x) when (default()) and not(default()) {never:  @x}
+
+.a(@x) when (default())    {} //如果Less 使用以下命令检测到多个mixin定义之间可能存在冲突，则会抛出错误default()：
+.a(@x) when not(default()) {}
+
+.c(red)                                    {case-1: darkred} //高级多种default()用法：
+.c(blue)                                   {case-2: darkblue}
+.c(@x) when (iscolor(@x)) and (default())  {default-color: @x}
+.c('foo')                                  {case-1: I am 'foo'}
+.c('bar')                                  {case-2: I am 'bar'}
+.c(@x) when (isstring(@x)) and (default()) {default-string: and I am the default}
+
+.za-function { //杂项函数
+  color: color("#aaa");  //解析颜色，将代表颜色的字符串转换为颜色值.
+  width: convert(9px, "pt"); //将数字从一种单位转换到另一种单位。 长度： m, cm, mm, in, pt and pc, 时间：s and ms, 角度： rad, deg, grad and turn.
+  image: data-uri('image/jpeg;base64', '../../static/images/team/1.jpg'); //内联资源 参数：mimetype：（可选）MIME类型字符串。url：要内联的文件的URL。 url('data:image/jpeg;base64,bm90IGFjdHVhbGx5IGEganBlZyBmaWxlCg==');
+  .t-default(100px); //存在匹配的函数就匹配，如果不存在就走default。除非when not：存在一个与这个函数匹配的调用则匹配（不是default）
+  //.t-default(100%);
+  .m(1);
+  //.a(1);
+  .c(black);
+
+  width: unit(5, em); //没鸡毛用 数字单位
+  height: get-unit(5px); //没鸡毛用 获取值的单位
+  background-image: svg-gradient(to right, red, green 30%, blue); //svg渐变 方向必须之一to bottom，to right，to bottom right，to top right，ellipse或ellipse at center。方向既可以指定为转义值，也可以指定为空格分隔的单词列表。
+}
+div {
+  .mixin(12); //走default
+}
+div.style {
+  .mixin(3);
+}
+.str-function { //string函数
+  //escape("a=1"); //没鸡毛用 字符转义 a%3D1
+  filter: e("ms:alwaysHasItsOwnSyntax.For.Stuff()"); //我直接写值不就行了 有鸡毛用？ 它期望将字符串作为参数并按原样返回其内容
+  width: %("%apx", 1+2); //格式化字符串 好像有点用..
+  width: replace("20px", '\d', '8', ''); //替换字符串 没毛用
+}
+.qdgn-function { //清单功能
+  @list: "t", "e", "s", "t";
+  n: length(@list); //长度
+  v: extract(@list, 3); //提取
+}
+.num-function { //数学函数
+  s: ceil(2.4); //向上取舍整 3
+  x: floor(2.6); //向下取舍整 2
+  b: percentage(0.8); //百分比 80%
+  h: round(1.67, 1); // 1.7 四舍五入 参数2为保留小数点
+  p: sqrt(25cm); //平方根 保持单位不变 5cm
+  j: abs(25cm); //绝对值。保持单位不变
+  z: sin(1); //正弦函数
+}
+.type-function { //类型函数
+  n: isnumber(1);
+  s: isstring("h");
+  c: iscolor(red);
+  k: iskeyword(iskeyword); //是否是关键字
+  u: isurl(url(../images));
+  p: ispixel(56px); //是否是一个以像素为单位的数字
+  e: isem(7.8em); //是否为em值
+  b: ispercentage(7.8%);
+  ut: isunit(11px, px); //true如果值是指定单位的数字
+}
+.rgba-function { //颜色
+  color: rgb(90, 129, 32);
+  color: rgba(90, 129, 32, 0.5);
+  color: argb(rgba(90, 23, 148, 0.5));
+  color: hsl(90, 100%, 50%);
+  color: hsl(90, 100%, 50%, 0.5);
+  color: hsv(90, 100%, 50%);
+  color: hsva(90, 100%, 50%, 0.5);
+}
+.color-function { //色彩
+  color: rgba(hue(hsl(90, 100%, 50%)), 129, 32, 0.5);
+  //saturation(hsl(90, 100%, 50%)); //色彩饱和度
+  //lightness(hsl(90, 100%, 50%)); //亮度
+  //hsvsaturation(hsv(90, 100%, 50%)) //超饱和
+  //red(rgb(10, 20, 30)); //红色
+  //green(rgb(10, 20, 30)) //绿色
+  //blue(rgb(10, 20, 30)) //蓝色
+  //luma(rgb(100, 200, 30)) //亮度
+  //luminance(rgb(100, 200, 30))
+}
+.sec-function { //色彩操作
+  color: saturate(hsl(90, 80%, 50%), 20%); //饱和度绝对增加
+  color: desaturate(hsl(90, 80%, 50%), 20%); //饱和度降低
+  color: lighten(hsl(90, 80%, 50%), 20%); // 颜色的亮度绝对增加
+  color: darken(hsl(90, 80%, 50%), 20%); //色彩亮度绝对减少一些
+  color: fadein(hsla(90, 90%, 50%, 0.5), 10%); //降低颜色的透明度
+  color: fadeout(hsla(90, 90%, 50%, 0.5), 10%); //增加颜色的透明度
+  color: fade(hsl(90, 90%, 50%), 10%); //设置颜色的绝对透明度
+  color: spin(hsl(10, 90%, 50%), 30); //旋转
+  color: spin(hsl(10, 90%, 50%), -30);
+  color: mix(#ff0000, #0000ff, 50%); //混合
+  color: greyscale(hsl(90, 90%, 50%)); //灰度 消除所有饱和度
+  @c: luma(hsl(90, 90%, 50%));
+  color: rgb(@c, @c, @c);
+  color: contrast(#222222, #101010); //形成对比
+}
+
+@import "//www.w3cschool.cn/less/myfile.less"; //导入
+//条件表达式
+.mixin (@a, @b) when (@a = 20px) and (@b < 20) { //if @a = 20px and @b < 20
+  color:red;
+}
+

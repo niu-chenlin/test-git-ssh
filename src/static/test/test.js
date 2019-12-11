@@ -2082,6 +2082,22 @@ const AnimalFactory = function(subFun, superFun) {
 function download_click() {
     window.open('https://files.ktsport.cn/bike_trace/860344048808142/2019-10-23.log');
 }
+function pk() {
+    let sum = []; //(A,C,E)  (B,D,F)
+    for(let i = 1; i <= 50; i++) {
+        sum.push(i);
+    }
+}
+//li与li之间有看不见的空白间隔是什么原因引起的？有什么解决办法？
+//行框的排列会受到中间空白（回车\空格）等的影响，因为空格也属于字符,这些空白也会被应用样式，占据空间，所以会有间隔，把字符大小设为0，就没有空格了。
+
+//CommonJS CommonJS就是为JS的表现来制定规范，NodeJS是这种规范的实现，webpack 也是以CommonJS的形式来书写。因为js没有模块的功能所以CommonJS应运而生，它希望js可以在任何地方运行
+//CommonJS定义的模块分为:{模块引用(require)} {模块定义(exports)} {模块标识(module)}
+//AMD CommonJS是主要为了JS在后端的表现制定的，他是不适合前端的 于是乎，AMD(异步模块定义)出现了，它就主要为前端JS的表现制定规范
+
+//CSS 预处理器 / 后处理器
+//CSS 预处理器定义了一种新的语言，其基本思想是，用一种专门的编程语言，为 CSS 增加了一些编程的特性，将 CSS 作为目标生成文件，然后开发者就只要使用这种语言进行编码工作。 Less、Sass
+//css后处理器  处理器通常采用 autoprefixer 的方案，根据定义的 browser list 自动添加前缀。
 
 //css解析选择器的匹配规则 SS选择器的读取顺序是从右向左 先找到span然后顺着往上找到class为“haha”的div再找到id为“molly”的元素
 //如果从左向右的顺序读取，在执行到左边的分支后发现没有相对应标签匹配，则会回溯到上一个节点再继续遍历，直到找到或者没有相匹配的标签才结束 消耗很多性能
