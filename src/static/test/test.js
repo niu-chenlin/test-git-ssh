@@ -2120,6 +2120,21 @@ function pk() {
 //1. 父元素  position: relative;  2.A元素   position: absolute; width: 100%;
 //1. 父元素  position: relative;  2.B元素   position: absolute; top: 100px; bottom: 0;
 
+//reactUI框架：
+// 1.Material-UI是一款React组件库来实现Google的Material Design风格UI界面框架。也是首个React的UI工具集之一。 https://material-ui.com/zh/
+// 2.Ant-design是阿里巴巴团队出品的ReactUI组件库。https://ant.design/docs/react/introduce-cn
+// 3.eact-Bootstrap是一款基于ReactJS对Bootstrap进行封装的库。https://react-bootstrap.github.io
+// 4.Semantic UI 是一款非常优秀的前端开发框架。它在用户体验的设计上与Bootstrap和Foundation相比,更胜一筹。 https://semantic-ui.com
+// 5.一款面向MacOS Sierra和Windows10桌面风格的ReactUI组件库。React-Desktop是跨平台桌面应用程序的 UI 组件。 http://reactdesktop.js.org/docs/
+
+//vueUI框架：
+// 1.element ui框架的按钮组件，由饿了么前端开源的UI框架。 http://element-cn.eleme.io/#/zh-CN
+// 2.iView 是一套基于 Vue.js 的开源 UI 组件库，主要服务于 PC 界面的中后台产品。使用单文件的 Vue 组件化开发模式 基于 npm + webpack + babel 开发。https://www.iviewui.com/
+// 3.Vuetifyjs 根据材料设计规格提供 UI 布局。 V 1.0 Alpha 版本提供了超过 80个 reusbale 组件。https://vuetifyjs.com/zh-Hans/
+// 4.基于 Vue.js 的 Bootstrap 组件 该仓库包含一系列基于 Bootstrap 标记和 CSS 的本地 Vue.js 组件。所以不需要 jQuery 和 Bootstrap 的 JavaScript 文件，
+//      唯一需要依赖的是: Vue.js Bootstrap CSS ，VueStrap 不依赖某个非常精确的 Bootstrap 版本。喜欢bootstrap的小伙伴又不想换jquery的开发方式是不二的选择。http://yuche.github.io/vue-strap/
+// 5.cube-ui 是滴滴团队开发的基于 Vue.js 实现的精致移动端组件库。支持按需引入和后编译，轻量灵活；扩展性强，可以方便地基于现有组件实现二次开发。 https://didi.github.io/cube-ui/#/zh-CN/example
+
 //堆栈是一种按序排列的数据结构，只能在一端(称为栈顶(top))对数据项进行插入和删除
 // 1.请你谈谈Cookie
 // Cookie虽然在持久保存客户端数据提供了方便 分担了服务起存储的负担 但是还有许多局限性   持久保存客户端数据
