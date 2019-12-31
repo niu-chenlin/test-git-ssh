@@ -7,7 +7,7 @@ console.log(document.getElementById("cd")); //普通script会阻塞dom解析，�
 // 为什么DOMContentLoaded事件的触发既可能在async脚本执行前、又可能在async脚本执行后呢？因为，async 标签的脚本加载完毕的时间有两种情况：
 //情况1： HTML 还没有被解析完的时候，async脚本已经加载完了，那么 HTML 停止解析，去执行脚本，脚本执行完毕后触发DOMContentLoaded事件。
 //情况2： HTML 解析完了之后，async脚本才加载完，然后再执行脚本，那么在HTML解析完毕、async脚本还没加载完的时候就触发DOMContentLoaded事件。
-//总之， DomContentLoaded 事件只关注 HTML 是否被解析完，而不关注 async 脚本。
+//总之， DomContentLoaded 事件只关注 HTML 是否被解析完，而不关注 async 脚本。11
 
 //如果 script 标签中包含 defer，那么这一块脚本将不会影响 HTML 文档的解析，而是等到 HTML 解析完成后才会执行。而 DOMContentLoaded 只有在 defer 脚本执行结束后才会被触发。
 //情况1：HTML还没解析完成时，defer脚本已经加载完毕，那么defer脚本将等待HTML解析完成后再执行。defer脚本执行完毕后触发DOMContentLoaded事件。
