@@ -74,3 +74,10 @@ console.log(document.getElementById("cd")); //普通script会阻塞dom解析，�
 // <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no”>
 
 // background-attachment:作用是设置背景图像是否固定或者随着页面的其余部分滚动。
+
+
+
+
+// le's eat out to night
+// i need your help
+// They caught the thief

@@ -10,6 +10,14 @@ function isStatic(value) { //检测数据是不是原始数据
         typeof value === 'symbol' ||
         //typeof null | array | /^&/正则 | Boolean(true) === 'object'; 返回Object。typeof function 返回function。 typeof 1/0 返回NaN
         value === null //==会进行类型转换 ===不会进行类型转换 也就是说===一旦类型不同直接false
+        //当进行双等号比较时候： 先检查两个操作数数据类型，如果相同， 则进行===比较， 如果不同， 则愿意为你进行一次类型转换， 转换成相同类型后再进行比较， 而===比较时， 如果类型不同，直接就是false.
+        //ECMAScript 有 5 种原始类型（primitive type），即 Undefined、Null(null 被认为是对象的占位符)、Boolean、Number 和 String。
+        //值 undefined 实际上是从值 null 派生来的，因此 ECMAScript 把它们定义为相等的: null == undefined
+        //ECMAScript 的 Boolean 值、数字和字符串的原始值是伪对象，这意味着它们实际上具有属性和方法。
+        //ECMAScript 定义所有对象都有 toString() 方法，无论它是伪对象，还是真对象。因为 String 类型属于伪对象，所以它一定有 toString() 方法。
+        //Number 类型的 toString() 方法比较特殊，它有两种模式，即默认模式和基模式。默认模式输出的都是十进制形式的。基模式可以用不同的基输出数字。基：基于进制。如2进制就是2.
+        //parseInt() 和 parseFloat()只有对 数字String 类型调用这些方法，它们才能正确运行；对其他类型返回的都是 NaN。
+        //console.log(new Boolean(false) && true); //te被作为一个对象转换为了true （在 Boolean 表达式中，所有【对象】都会被自动转换为 true）
     )
 }
 function isObject(value) { //判断数据是不是引用数据类型
@@ -112,6 +120,9 @@ function extend(to, _from) {//将属性混合到目标对象中
     return to
 }
 function simpleClone() {//对象属性复制，浅拷贝 Object.assign方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。
+    // 浅度拷贝：复制一层对象的属性，并不包括对象里面的为引用类型的数据，当改变拷贝的对象里面的引用类型时，源对象也会改变。·
+    // 深度拷贝：重新开辟一个内存空间，需要递归拷贝对象里的引用，直到子属性都为基本类型。两个对象对应两个不同的地址，修改一个对象的属性，
+    // 不会改变另一个对象的属性。
     Object.assign = Object.assign || function() {
         if(arguments.length == 0) throw new TypeError('Cannot convert undefined or null to object');
         let target = arguments[0], args = Array.prototype.slice.call(arguments, 1), key;
@@ -122,7 +133,8 @@ function simpleClone() {//对象属性复制，浅拷贝 Object.assign方法用�
         });
         return target;
     }
-    //or let clone = JSON.parse( JSON.stringify(String) );
+    // let array_concat = array.concat([4]); //浅拷贝 引用数据的改动受影响，添加删除原数组不受影响
+    // let array_slice = array.slice(0); //浅拷贝 引用数据的改动受影响，添加删除原数组不受影响
 }
 function deepClone(value, deep) {//深拷贝 有待研究 (修改拷贝副本不会影响主本)
     if(isStatic(value)){
@@ -144,6 +156,7 @@ function deepClone(value, deep) {//深拷贝 有待研究 (修改拷贝副本不
         case 'Error': value = new window[type](value); break;
     }
     return value
+    //or let clone = JSON.parse( JSON.stringify(String) );
 }
 function getBrowser() { //识别各种浏览器及平台 Navigator 对象包含有关浏览器的信息。
     let inBrowser = typeof window !== 'undefined'; //运行环境是浏览器
@@ -274,13 +287,13 @@ function unique() {//数组去重 6种方法 1.indexOf 2.ES6的includes 3.把数
     function qc6(arr) { //第1种方法扩展，类似indexOf使用Array方法 find filter
         let ret = [];
         for(let i = 0; i < arr.length; i++) {
-            let r = ret.find((a) => {
+            let r = ret.find((a) => { //true时返回元素，停止遍历 false时继续循环
                 return a === arr[i];
                 // if(a === arr[i]) { //此操作会有意想不到的结果
                 //     return a;
                 // }
             });
-            if(!r) {
+            if(r === undefined) {
                 ret.push(arr[i]);
             }
         }
@@ -299,6 +312,18 @@ function unique() {//数组去重 6种方法 1.indexOf 2.ES6的includes 3.把数
                 ret.push(arr[i]);
             }
         }
+        return ret;
+    }
+    function qc8(arr) { //类似第三种方法，利用对象key
+        let obj = {};
+        let ret = arr.filter(function(item){
+            if(obj.hasOwnProperty(typeof item + item)) {
+                return false
+            } else {
+                return  (obj[typeof item + item] = true)
+            }
+            // return obj.hasOwnProperty(typeof item + item) ? false : (obj[typeof item + item] = true)
+        });
         return ret;
     }
 }
