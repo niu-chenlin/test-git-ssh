@@ -136,26 +136,43 @@ function simpleClone() {//对象属性复制，浅拷贝 Object.assign方法用�
     // let array_concat = array.concat([4]); //浅拷贝 引用数据的改动受影响，添加删除原数组不受影响
     // let array_slice = array.slice(0); //浅拷贝 引用数据的改动受影响，添加删除原数组不受影响
 }
-function deepClone(value, deep) {//深拷贝 有待研究 (修改拷贝副本不会影响主本)
-    if(isStatic(value)){
-        return value
+function deepClone(obj, target = {}) {//深拷贝 有待研究 (修改拷贝副本不会影响主本)
+    if(isStatic(obj)){
+        return obj
     }
-    if(isType(value) === "数组") { //数组
-        value =  Array.prototype.slice.call(value);
-        return value.map(item => deep ? deepClone(item, deep) : item)
-    } else if(isType(value) === "对象") {//对象
-        let target = {}, key;
-        for(key in value) {
-            value.hasOwnProperty(key) && (target[key] = deep ? deepClone(value[key], deep) : value[key])
+    if(isType(obj) === "数组") { //数组
+        obj = Array.prototype.slice.call(obj);
+        return obj.map(item => {
+            // if(Object.prototype.toString.call(item) === "[object Object]") {
+            //     return  deepClone1(item);
+            // } else {
+            //     return item;
+            // }
+            return Object.prototype.toString.call(item) === "[object Object]" ?
+                deepClone(item) : item;
+        })
+    } else if(isType(obj) === "对象") {//对象
+        for(let key in obj) {
+            if(obj.hasOwnProperty(key)) {
+                // if(Object.prototype.toString.call(obj[key]) === "[object Object]") {
+                //     target[key] = deepClone1(obj[key]);
+                // } else {
+                //     target[key] = obj[key];
+                // }
+                obj.hasOwnProperty(key) && (Object.prototype.toString.call(obj[key]) === "[object Object]" ?
+                    target[key] = deepClone(obj[key]) : target[key] = obj[key]);
+
+            }
         }
+
     }
-    let type = getRawType(value);
+    let type = getRawType(obj);
     switch(type){
         case 'Date':
         case 'RegExp':
-        case 'Error': value = new window[type](value); break;
+        case 'Error': obj = new window[type](obj); break;
     }
-    return value
+    return target;
     //or let clone = JSON.parse( JSON.stringify(String) );
 }
 function getBrowser() { //识别各种浏览器及平台 Navigator 对象包含有关浏览器的信息。
@@ -678,7 +695,7 @@ function csc() {//禁止右键、选择、复制
 /**
  * 方法函数
  */
-function objectFun(obj, son) { //对象中的一些方法
+function objectFun(obj, son)  { //对象中的一些方法
     Object.getOwnPropertyNames(obj); //返回对象的所有属性
     Object.getPrototypeOf(obj); //查询对象的原型
     Object.getOwnPropertyDescriptor(obj, 'key'); //返回对象自有属性的配置信息
@@ -693,7 +710,7 @@ function cutStrByIndex(value, type, start, end) {//通过位置截取字符串 3
         case "普通":
             return value.slice(start, end) || value.substring(start, end);
         case "按长度":
-            return value.substr(start, end);
+            return value.substr(start, end); //substr(5, 8) 从5开始截取8个
     }
 }
 function cutStrByStr(value, str) { //截取value中的子字符 3种1.（indexOf|search）+ substring 2.match 3.charAt循环比较
@@ -707,6 +724,11 @@ function cutStrByStr(value, str) { //截取value中的子字符 3种1.（indexOf
             }
         }
     }
+    console.log(ret);
+    console.log(value.substring(start, end));
+    console.log(value.substr(start, str.length));
+    console.log(value.match(str)[0]);
+    console.log(new RegExp(str).exec(value)[0]);
     return value.substring(start, end) || (value.match(str) && (value.match(str)[0]) || new RegExp(str).exec(value)[0]) || ret
 }
 function getStrIndex(value, type, str) {//获取字符在value中的下标 4种indexOf lastIndexOf search match(str).index
@@ -725,7 +747,7 @@ function getStrByIndex(value, index) {//获取下标中的字符
 function clearBlank(value, type) { //去除空格 3种replace trim
     if(type == "普通") { //正则 i：忽略大小写 g：替换将针对行中每个匹配的串
         value.replace(/\s*/g, ''); //去除所有空格
-        value.replace(/^\s*|\s*&/g) || value.trim();//去除两侧空格
+        value.replace(/^\s*|\s*$/g, '') || value.trim();//去除两侧空格
     } else {
         let ret = "";
         for(let i = 0; i < value.length; i++) {
@@ -771,14 +793,18 @@ function bibao() {
 function promote() {
     //函数提升优先级比变量提升要高，且不会被变量声明覆盖，但是会被变量赋值覆盖。
     console.log(foo);
-    var foo = "变量";
+    var foo = "变量"; //注意let和var区别
     function foo(){
         console.log("函数声明");
     }
     console.log(foo);
 }
 function eventLoop() {//js事件循环机制
-    //单线程：同一个时间只能做一件事。 为什么JavaScript是单线程：操作DOM。 JS多线程： Web Worker（开启一个子线程 子线程完全受主线程控制，且不得操作DOM）
+    //单线程：同一个时间只能做一件事。
+    // 为什么JavaScript是单线程：操作DOM。
+    // 假定JavaScript同时有两个线程，一个线程在某个DOM节点上添加内容，另一个线程删除了这个节点，这时浏览器应该以哪个线程为准？
+    // 为了避免复杂性，从一诞生，JavaScript就是单线程
+    // JS多线程： Web Worker（开启一个子线程 子线程完全受主线程控制，且不得操作DOM）
     //非阻塞：事件循环
     //堆栈：堆里存放着一些对象。而栈中则存放着一些基础类型变量以及对象的指针
     //执行栈：当一系列方法被依次调用的时候，因为js是单线程的，同一时间只能执行一个方法，于是这些方法被排队在一个单独的地方。这个地方被称为执行栈
@@ -829,7 +855,7 @@ function eventLoop() {//js事件循环机制
 
     // 输出变成 0 -> 1 -> 2 -> 3 -> 4 -> 5
     const tasks = [];
-    for (var i = 0; i < 5; i++) {   // 这里 i 的声明不能改成 let，如果要改该怎么做？
+    for (var i = 0; i <= 5; i++) {   // 这里 i 的声明不能改成 let，如果要改该怎么做？
         ((j) => {
             tasks.push(new Promise((resolve) => {
                 setTimeout(() => {
@@ -988,9 +1014,10 @@ function digui() { // 递归获取JSON子节点
     }
 }
 function testThis() {
-    //this指向：DOM 事件处理函数中的 this & 内联事件中的 this
+    //this指向：DOM 事件处理函数中的 this & 内联事件中的 this  this 指代上级对象
     //普通函数：指向调用的对象
     //箭头函数：词法作用域：在哪里定义其this就指向定义中的作用域 使用bind call apply忽略第一个参数  //this指向最近的作用域->te 可理解为() => {}无作用域
+    // 箭头函数的this是在定义函数时绑定的，不是在执行过程中绑定的。简单的说，函数在定义时，this就继承了定义函数的对象。
     //构造函数：指向实例对象（构造函数return对象时 this指向return的对象）
     //DOM事件处理函数：当函数被当做监听事件处理函数时， 其 this 指向触发该事件的元素 （针对于addEventListener事件）
     //内联事件：内联事件中的this指向分两种情况：1.当代码被内联处理函数调用时，它的this指向监听器所在的DOM元素 2.当代码被包括在函数内部执行时，在非严格模式指向全局对象window， 在严格模式指向undefined
@@ -1087,6 +1114,27 @@ function testThis() {
     var bar = obj6.foo;
     var a = "oops, global";
     bar();
+
+    var length = 10;
+    function fn(){
+        console.log(this.length);
+    }
+    var obj = {
+        length: 5,
+        method: function(fn){
+            fn();
+            arguments[0]();
+        }
+    };
+    obj.method(fn,"111","222");
+
+
+// tip1:
+//     obj.method的value并不是一个可以直接执行的函数，通过obj.method并不能执行函数，
+// 　　　　　　所以this指向的并不是obj,输出的不是5，this指向的是function这个无名函数，他的执行对象直接是window,发生隐式丢失
+// 但是arguments[0]();也会执行，因为传入的第一个参数就是一个函数，同时传进了两个多余的实参，所以打印出的为3
+// tip2:
+//     数组是很特殊的对象，他的索引值相当于是obj2对象中的属性值。所以说数组，类数组也会改变this指向问题。
 }
 function debounce(func, wait) {//防抖
     let timeId;
@@ -1102,7 +1150,6 @@ function debounce(func, wait) {//防抖
             console.log(123);
         }, 1000);
     };
-
 }
 function throttle(func, wait) {//节流
     let lastTime = null;// 为了避免每次调用lastTime都被清空，利用js的闭包返回一个function;此外声明为全局变量也可以
@@ -1215,8 +1262,9 @@ function css() {//Edge Reflow
         //当涉及到命名时，您还可以考虑BEM，它遵循一组原则，提供基于组件并增加一致性的开发方法。
     }
     let transform = {
-        //最好使用transform()函数来创建元素的位移或大小动画，尽量不要直接改变元素的width，height以及left/top/bottom/right属性值。
-        // transition: 0.4s ease-out;   ease-out{transform: translateX(450px);}
+        //最好使用transform(穿丝for)函数来创建元素的位移或大小动画，尽量不要直接改变元素的width，height以及left/top/bottom/right属性值。
+        // transition(穿丝森): 0.4s ease-out;   ease-out{transform: translateX(450px);}
+        //scale:s给奥  rotate:肉忒特 skew:sQ
     }
     let unit = {
         //Em, Rem与px
@@ -1224,24 +1272,61 @@ function css() {//Edge Reflow
         //rem - 相对于<html>元素的font-size大小计算，rem使得统一改变页面上的所有标题和段落文本大小变得非常容易。
         //px - 像素单位是最精确的，但是不适用于自适应的设计。px单位是可靠的，并且易于理解，我们可以精细的控制元素的大小和移动到1px。
     }
-    let buju = {
-        //1.单列布局 上 中(width 80%; margin: auto) 下
+    let buju = { //百分比的高度在设定时需要根据这个元素的父元素容器的高度 html,body{ height:100%; }
+        //1.单列布局 上 中(width 80%; margin: auto) 下 利用    height width和margin: auto; 注意html和body的高度
         //2.两栏布局 左(float: left; height:100% width: 200px) 右 width: calc(100% - 200px);
-        // 2.OR 左(display: inline-block height:100% width: 200px) 右(display: inline-block width: calc(100% - 200px);) 带来的问题
+        // 2.OR 左(display: inline-block height:100% width: 200px) 右(display: inline-block width: calc(100% - 200px);) 带来的问题 calc:计算元素宽度的函数
         // 2.问题：display: inline-* 会把代码中的空格和回车算进去会有间距。解决1：使用margin负值 margin-right: -3px; 2.父元素使用font-size:0 子元素自己的字体 3.父元素letter-spacing(设置字符间距):-3px 子元素0
         // 2.display: grid;grid-template-columns: auto 1fr; grid-gap: 20px; grid布局
         // 3.采用flex实现，左侧固定大小，右侧设置flex:1,即可实现自适应
-        //4.圣杯布局 middle写在最前面，这样网页在载入时，就会优先加载 通过给 container 左右固定的padding来预留出left和right的空间
+        // 4.圣杯布局 middle写在最前面，这样网页在载入时，就会优先加载 通过给 container 左右固定的padding来预留出left和right的空间
+        //  所谓的圣杯布局就是左右两边大小固定不变，中间宽度自适应。我们可以用浮动、定位以及flex这三种方式来实现
         // 内部元素都是左浮动的，主要区域宽度100%; 左侧区域通过margin-left:-100%;使它浮动到左方 然后更具自身定位 left：-300px;将之移动到父容器的padding中右侧同理，只不过只需要margin自己本身的宽度。
         // 使用margin-left的负百分比的时候盒子其实是相对上一个浮动的盒子 结合float position: relative; left: -300px; margin-left: -100%;
         // 5.粘连布局 超出可视窗口底部往下 小于可视窗口 底部固定
     }
+    // css如何让height:100%起作用？
+    //1.html body设置height:100%; body设置margin: 0; padding: 0;
+    //2.body设置 body.style.width=document.documentElement.clientHeight; body.style.height=screenHeight+"px"; clientHeight:窗口尺寸
+    //3.body设置 position:absolute;top:0px;left:0px;right:0px;bottom:0px;padding:0;margin: 0;
+
+    // grid布局
+    // 采用网格布局的区域，称为"容器"（container）。容器内部采用网格定位的子元素，称为"项目"（item）。
+    // <div> 容器
+    //    <div><p>1</p></div> 项目
+    //    <div><p>2</p></div>
+    //    <div><p>3</p></div>
+    // </div>
+    // 注意：项目只能是容器的顶层子元素，不包含项目的子元素，比如上面代码的<p>元素就不是项目。Grid 布局只对项目生效。
+    // 容器属性：display: grid指定一个容器采用网格布局。 inline-grid指定div是一个行内元素，该元素内部采用网格布局。
+    // 注意，设为网格布局以后，容器子元素（项目）的float、display: inline-block、display: table-cell、vertical-align和column-*等设置都将失效。
+    // 容器指定了网格布局以后，接着就要划分行和列。grid-template-columns属性定义每一列的列宽，grid-template-rows属性定义每一行的行高。
+    // 1.grid-template-columns: 100px 100px 100px; grid-template-rows: 100px 100px 100px; 三行三列 repeat(3, 33.33%);也可以使用repeat函数
+    // 1.2.auto-fill关键字：repeat(auto-fill, 100px);如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用auto-fill关键字表示自动填充。
+    // 1.3.fr关键字：grid-template-columns: 1fr 2fr； 2fr：表示2倍
+    // 1.4.minmax()：grid-template-columns: 1fr 1fr minmax(100px, 1fr); minmax(100px, 1fr)表示列宽不小于100px，不大于1fr。
+    // 1.5.auto 关键字 grid-template-columns: 100px auto 100px; auto关键字表示由浏览器自己决定长度。 除非单元格内容设置了min-width
+    // 1.6.grid-template-columns属性和grid-template-rows属性里面，还可以使用方括号，指定每一根网格线的名字，方便以后的引用。 grid-template-columns: [c1] 100px [c2] 100px [c3] auto [c4];
+    // 1.7.grid-template-columns: 70% 30%; 百分比布局
+    // 2.grid-row-gap 属性设置行与行的间隔（行间距），grid-column-gap 属性设置列与列的间隔（列间距）简写：column-gap，grid-gap 属性是grid-column-gap和grid-row-gap的合并简写形式，简写gap。grid-gap: <grid-row-gap> <grid-column-gap>;
+    // 2.1grid-template-areas 网格布局允许指定"区域"（area），一个区域由单个或多个单元格组成。grid-template-areas属性用于定义区域 grid-template-areas: 'a b c' 'd e f' 'g h i';  'a . c'中间一列为点，表示没有用到该单元格，或者该单元格不属于任何区域。
+    // 2.2grid-auto-flow 划分网格以后，容器的子元素会按照顺序，自动放置在每一个网格。默认的放置顺序是"先行后列"，即先填满第一行，再开始放入第二行。这个顺序由grid-auto-flow属性决定，默认值是row，即"先行后列"。也可以将它设成column，变成"先列后行"。grid-auto-flow: column;
+    // 2.2.1grid-auto-flow属性除了设置成row和column，还可以设成row dense和column dense。这两个值主要用于，某些项目指定位置以后，剩下的项目怎么自动放置。     grid-auto-flow: row dense; 密集型放置单元格
+    // 3.justify-items 属性设置单元格内容的水平位置（左中右），align-items 属性设置单元格内容的垂直位置（上中下），place-items 属性是align-items属性和justify-items属性的合并简写形式 place-items: <align-items> <justify-items>;
+    // 4.justify-content 属性整个内容区域在容器里面的水平位置（左中右），align-content 属性整个内容区域的垂直位置（上中下），place-content 属性是align-content属性和justify-content属性的合并简写形式  place-content: <align-content> <justify-content>
+    // 5.grid-auto-columns 属性，grid-auto-rows 属性.多余行列的大小。如：设置项目的grid-row-start开始行grid-column-start开始列为不存在浏览器中的值时。写法与grid-template-row|column一样
+    // 6.grid-template属性是grid-template-columns、grid-template-rows和grid-template-areas这三个属性的合并简写形式
+    //项目属性grid-column-start 属性，grid-column-end 属性，grid-row-start 属性，grid-row-end 属性 项目的位置是可以指定的，具体方法就是指定项目的四个边框，分别定位在哪根网格线。使用这四个属性，如果产生了项目的重叠，则使用z-index属性指定项目的重叠顺序。
+    // 1.grid-column 属性是grid-column-start和grid-column-end的合并简写形式，grid-row 属性是grid-row-start属性和grid-row-end的合并简写形式
+    // 2.grid-area  grid-area: e; 指定项目放在哪一个区域。 根据grid-template-areas定义的名称
+    // 3.justify-self 属性设置单元格内容的水平位置（左中右），align-self 属性设置单元格内容的垂直位置（上中下），place-self 属性place-self: <align-self> <justify-self>;
+
 }
 function cssCenter() {
     //行内元素水平居中：1.设置父元素（父元素必须是块级元素）text-align: center; 2.设置子元素display: table; margin: auto;
         //注：1.使用text-align居中的条件是子元素必须是行内元素 2.使用margin居中的条件是当前元素必须有width
 
-    //块级元素水平居中：1.宽度确定？1.margin: auto;:不确定：行内子元素使用display: inline-block;后宽度会被撑开
+    //块级元素水平居中：1.宽度确定？1.margin: auto;:不确定：行内子元素使用display: inline-block;width就管用了 后宽度会被撑开
         //2.父元素为相对定位，子元素为绝对定位，子元素的left:50%，子元素的 margin-left: -元素宽度的一半px||transform: translateX(-50%);
         //3.使用flexbox布局实现:   display: flex; justify-content: center;
             // 注：justify-content 用于设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式。
@@ -1260,9 +1345,16 @@ function cssCenter() {
         //2.父元素为相对定位，子元素为绝对定位，子元素top: 50%; left: 50%; transform: translate(-50%, -50%);（行块均可以）
         //3.使用flexbox布局实现: display: flex; justify-content: center;align-items: center;（行块均可以）
         //4.其它结合方案：1.父元素（父元素必须是块级元素）text-align: center; 2.给父元素设置 display: table-cell; vertical-align: middle;（父元素宽高要确定）（行块均可以）
-        //5.其它结合方案：1.父元素margin: 0 auto;确定宽度 2.子元素position: absolute; top: 50%; transform: translateY(-50%);（行块均可以）
+        //弃掉 5.其它结合方案：1.父元素margin: 0 auto;确定宽度 2.子元素position: absolute; top: 50%; transform: translateY(-50%);（行块均可以）
         //6 1.父元素display: flex;   2.子元素margin: auto;
+
+    //总结：
+    //1.父元素text-align: center;display: table-cell;vertical-align: middle;
+    //2.flex布局父元素display: flex;justify-content: center;align-items: center;
+    //3.父元素position: relative; 子元素 position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);
+    //4.父元素position: relative;width/height要明确 子元素 position: absolute;left: 0;right: 0;top: 0;bottom: 0;margin: auto;width: 40px;height: 20px;
 }
+
 function carousel() {
     //核心实现：移动ul的left来确定图片的显示
     //核心步骤：
@@ -1859,6 +1951,11 @@ function kuayu() {
 //     text/plain
 //     任何一个不满足上述要求的请求，即被认为是复杂请求。一个复杂请求不仅有包含通信内容的请求，同时也包含预请求（preflight request）。
 //     预请求实际上是对服务端的一种权限请求，只有当预请求成功返回，实际请求才开始执行。
+//     如果你的浏览器发起一个“非简单”请求（比如这个请求里包含了cookies，或者Content-type不包含application/x-ww-form-urlencoded, multipart/form-data
+// 或者 text-plain）一个叫做预检查的机制会发送一个OPTIONS请求到服务器。如果服务器没有返回带有特殊头部的数据，简单请求GET或者POST请求仍然会发送，服务器的数据也会返回，
+// 但是浏览器会阻止Javascript获取这次请求
+//     复杂请求时，如果OPTIONS的请求，服务器没有做出适当的返回，后面真实的请求将不会发送
+
 
     // 三 图片ping 使用图片ping跨域只能发送get请求，并且不能访问响应的文本，只能监听是否响应而已，可以用来追踪广告点击。
     var img=new Image();
@@ -1921,7 +2018,66 @@ function dom() {
     //1.DOMContentLoaded：当初始的 HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，而无需等待样式表、图像和子框架的完成加载。
     //注意：DOMContentLoaded 事件必须等待其所属script之前的样式表加载解析完成才会触发。
 }
+function zyy() {
+// 许多开发人员经常混淆作用域和执行上下文的概念，误认为它们是相同的概念，但事实并非如此。
+// 我们知道 JavaScript 属于解释型语言，JavaScript 的执行分为：解释和执行两个阶段,这两个阶段所做的事并不一样：
+// 解释阶段：
+//  词法分析
+//  语法分析
+//  作用域规则确定
+// 执行阶段：
+//  创建执行上下文
+//  执行函数代码
+//  垃圾回收
+//     JavaScript 解释阶段便会确定作用域规则，因此作用域在函数定义时就已经确定了，而不是在函数调用时确定，但是执行上下文是函数执行之前创建的。
+//     执行上下文最明显的就是 this 的指向是执行时确定的。而作用域访问的变量是编写代码的结构确定的。
+    //函数执行过程--->
+    // 1.函数被调用 -->
+    // 2.创建执行环境以及相应的作用域链，并把作用域链赋值给[scope]
+    // 3.使用this\arguments初始化函数的活动对象 当前执行环境的变量对象始终在作用域链的第0位
+    // 4.压入环境栈中 执行函数代码
+    // 5.栈将该函数的变量对象弹出 垃圾回收
+}
+function newOrCreate() {
+    function Obj() {
+        this.a = 1;
+        this.b = 2;
+    }
+    let obj = {
+        a: 1,
+        b: 2
+    };
+    let ret = Object.create(obj); //
+    let ret1 = new Obj(); //
+    console.log(ret);
+    console.log(ret1);
+    console.log(ret.__proto__ === ret1.__proto__.constructor);
 
+    function newObj() {
+        let obj = {};
+        let constoructor = Array.prototype.shift.call(arguments);
+        obj.__proto__ = constoructor.prototype;
+        let ret = constoructor.apply(obj, arguments);
+        return typeof ret === 'object' ? ret : obj;
+    }
+    function createObj() {
+        let obj = {};
+        let constoructor = Array.prototype.shift.call(arguments);
+        obj.__proto__ = constoructor;
+        return obj;
+    }
+
+    let co = createObj(obj);
+    let no = newObj(Obj);
+    console.log(co);
+    console.log(no);
+
+//new 和 Object.create()
+// 区别1：两者都是创建空对象，但是new创建出的空对象会绑定Object的prototype原型对象，但是Object.create(null)的空对象是没有任何属性的
+//     2：Object.create(obj)返回一个对象，这个返回的对象的__proto__ = 参数obj。
+//     3：new一个对象的过程 返回一个对象，这个返回的对象的__proto__ = 构造函数的prototype，
+// 并将构造函数的this指向返回的对象，这样新对象就可以访问构造函数中的属性和方法，并执行一下构造函数。
+}
 //设计模式
 function danli() {
     var Singleton = function(name) {
@@ -2117,15 +2273,27 @@ function pk() {
 //行框的排列会受到中间空白（回车\空格）等的影响，因为空格也属于字符,这些空白也会被应用样式，占据空间，所以会有间隔，把字符大小设为0，就没有空格了。
 
 //CommonJS CommonJS就是为JS的表现来制定规范，NodeJS是这种规范的实现，webpack 也是以CommonJS的形式来书写。因为js没有模块的功能所以CommonJS应运而生，它希望js可以在任何地方运行
-//CommonJS定义的模块分为:{模块引用(require)} {模块定义(exports)} {模块标识(module)}
+//CommonJS定义的模块分为:{模块引用(require)} {模块定义(exports)} {模块标识(module)} require:导入 module.exports == exports:导出
 //AMD CommonJS是主要为了JS在后端的表现制定的，他是不适合前端的 于是乎，AMD(异步模块定义)出现了，它就主要为前端JS的表现制定规范
+//CommonJS模块规范和ES6模块规范：
+//require：node和es6都支持
+//export/import：只有es6支持的导入导出
+//module.exports/exports：只有 node 支持的导出
+//ES6:
+//export default命令，为模块指定默认输出。
+//export与export default均可用于导出常量、函数、文件、模块等
+//在一个文件或模块中，export、import可以有多个，export default仅有一个
+//通过export方式导出，在导入时要加{ }，export default则不需要
+//export能直接导出变量表达式，export default不行。
 
 //CSS 预处理器 / 后处理器
 //CSS 预处理器定义了一种新的语言，其基本思想是，用一种专门的编程语言，为 CSS 增加了一些编程的特性，将 CSS 作为目标生成文件，然后开发者就只要使用这种语言进行编码工作。 Less、Sass
 //css后处理器  处理器通常采用 autoprefixer 的方案，根据定义的 browser list 自动添加前缀。
 
-//css解析选择器的匹配规则 SS选择器的读取顺序是从右向左 先找到span然后顺着往上找到class为“haha”的div再找到id为“molly”的元素
+//css解析选择器的匹配规则 CSS选择器的读取顺序是从右向左 先找到span然后顺着往上找到class为“haha”的div再找到id为“molly”的元素
 //如果从左向右的顺序读取，在执行到左边的分支后发现没有相对应标签匹配，则会回溯到上一个节点再继续遍历，直到找到或者没有相匹配的标签才结束 消耗很多性能
+// 比如：.list a {color:blue;}
+// 先解析到 a 标签，并将页面上所有 a 标签的字体颜色都按照 color:blue 进行渲染（蓝色），再解析到 .list ，将页面上所有 .list 类目下的 a 标签的字体渲染成蓝色。
 
 //style标签写在body后与body前有什么区别？
 //写在body标签前利于浏览器逐步渲染： resources downloading(资源加载)->CSSOM+DOM(生成CSSOM和DOM)->RenderTree(composite)(合成渲染树)->Layout(计算布局)->paint(绘制到页面)
@@ -2134,6 +2302,12 @@ function pk() {
 // 1. 当render tree中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建。这就称为回流(其实我觉得叫重新布局更简单明了些)。每个页面至少需要一次回流，就是在页面第一次加载的时候。
 // 2. 当render tree中的一些元素需要更新属性，而这些属性只是影响元素的外观，风格，而不会影响布局的，比如background-color。则就叫称为重绘。
 // 注：从上面可以看出，回流必将引起重绘，而重绘不一定会引起回流。
+
+// visibility:hidden隐藏的元素还是会包含到render tree中的，因visibility:hidden 会影响布局(layout)，会占有空间。
+// render tree不包含隐藏的节点(比如display:none的节点，还有head节点)，因为这些节点不会用于呈现
+
+//js阻塞DOM解析 css阻塞DOM渲染，但不阻塞DOM解析
+//css 的加载解析会阻塞后续的 script 执行
 
 //Cookie 隔离? 通过设置cookie的domain值 cookie不可跨域使用
 //如域A为t1.study.com，域B为t2.study.com，那么在域A生产一个令域A和域B都能访问的cookie就要将该cookie的domain设置为.study.com；
@@ -2199,7 +2373,7 @@ function pk() {
 // 6.js执行上下文
 // 分类：全局执行环境 函数执行环境 eval（E外奥）函数
 // 1.js执行上下文在函数被调用时创建 包括活动对象 作用链 this指向（this指向在函数调用时确认）
-// 		2.创建上下文时调用函数的对象被传递进函数的this中 匿名函数的this指向window 匿名函数具有全局性（this指向调用它的环境对象）
+// 2.创建上下文时调用函数的对象被传递进函数的this中 匿名函数的this指向window 匿名函数具有全局性（this指向调用它的环境对象）
 // 7.创建执行上下文的2个阶段
 // 1.创建阶段 创建变量对象  设置this值 设置[Scope]属性的只 激活/代码执行阶段
 // 2.初始化阶段 初始化变量对象的值 函数的引用 然后解释/执行代码
@@ -2221,7 +2395,7 @@ function pk() {
 // 工作原理：HTTP协议工作与客户端-服务端架构上 浏览器作为HTTP客户端通过URL向HTTP服务器既WEB服务起端发送请求（WEB服务器有：Apache服务器 IIS服务器等） HTTP默认端口为80
 // HTTP三点注意事项
 // 1.HTTP是无连接的 无连接的含义是限制每次连接只处理一个请求 服务端处理客户的请求 并受到客户的应答后 既断开连接（这种方式可节省传输时间）
-// 			2.HTTP是媒体独立的  这意味着 只要客户端和服务端知道怎么处理数据 HTTP可发送任何类型的数据 客户端以及服务端指定使用适合的MIME-type内容类型
+// 2.HTTP是媒体独立的  这意味着 只要客户端和服务端知道怎么处理数据 HTTP可发送任何类型的数据 客户端以及服务端指定使用适合的MIME-type内容类型
 // 3.HTTP是无状态的 HTTP协议是无状态协议 无状态是指协议对于事务处理没有记忆能力 缺少状态意味着如果后续处理需要前面的信息 则它必须重传 这样可导致每次传送的数据量增大 另一方面 在服务器不需要先前信息时它的应答就较快
 // 客户端发送HTTP请求的消息格式包括：请求行、请求头、空行、请求数据四部分
 // 请求行：请求方法 空格 URL 空格 协议版本 回车符 换行符
@@ -2237,14 +2411,15 @@ function pk() {
 // HTTP状态码的第一位数字定义了状态码的类型 共5种类型 1**服务器收到请求 2**成功 3**重定向 4**客户端错误 5**服务端错误
 // 12.TCP/IP协议：一个网络通信模型 以及一整个网络传输协议家族 为互联网的基础通信架构 它通常被称位TCP/IP协议族 简称TCP/IP
 // TCP：传输控制协议 TCP是一个端到端的可靠的面向连接的协议 提供可靠的 像管道一样的连接
-// TCP三次握手：发生在数据准备阶段 服务器和客户端通之间需要进行三次交互 			第一次：客户端发送syn包到服务器 并进入SYN_SEND状态，等待服务器确认
+// TCP三次握手：发生在数据准备阶段 服务器和客户端通之间需要进行三次交互
+// 第一次：客户端发送syn包到服务器 并进入SYN_SEND状态，等待服务器确认
 // 第二次：服务器收到syn包 必须确认客户的syn，同时自己也向客户端发送一个syn包 此时服务器进入SYN_RECY状态
 // 第三次：客户端收到服务器的syn包 向服务器发送确认包 次包发送完毕 客户端和服务端进入established状态
 // IP协议：将多个包交换网络连接起来 它在源地址和目的地址之间传送一种称之为数据包的东西 它还提供对数据大小的重新组功能 以适应不同网络对包大小的要求 IP提供可开的传输服务
 // IP的责任就是把数据从源传送到目的地。它不负责保证传送可靠性，流控制，包顺序和其它对于主机到主机协议来说很普通的服务。
 // 		IP地址：互联网上的每一个网络和每一台主机分配的一个逻辑地址
 // 13.输入网址按下回车后发生了什么？
-// 		1.DNS域名解析
+// 1.DNS域名解析
 // 2.发起TCP三次握手
 // 3.建立TCP连接后发起HTTP请求
 // 4.服务器端响应HTTP请求 浏览器得到HTML代码
@@ -2425,6 +2600,7 @@ function pk() {
 // react问题
 // 1.redux（瑞度克斯），redux是js状态容器，提供可预测化的状态管理
 
+// Initial(in内廋）
 // component（看破能它）
 // state（色dai特）
 // props（怕儿破斯）
@@ -2444,7 +2620,7 @@ function pk() {
 // react得到元素树之后，会自动计算出新树和老树的差异，然后根据差异对界面进行最小化的渲染，在react差异算法中，react能精确的知道那些元素发生了改变以及应该如何区改变，这样就保证了更新按需更新，而不是更新整个界面
 // 3.react生命周期
 // 1.初始化阶段
-// 1.getDdfauleProps：获取实例的默认属性
+// 1.getDefaultProps：获取实例的默认属性
 // 2.getInitialState：获取每个实例的初始状态
 // 3.componentWillMount：组件即将被装载、渲染到页面上
 // 4.render：组件生成虚拟DOM
@@ -2477,6 +2653,7 @@ function pk() {
 // 10.展示组件(Presentational component)和容器组件(Container component)之间有何不同
 // 展示组件关心组件看起来是什么 展示专门通过props接受数据和回调 并且不会有自身的状态 就是有状态关系的也是UI状态而不是数据状态 类似高阶组件 负责展示不同组件
 // 容器组件则更关心组件是如何运作的，容器组件会为其他展示或容器组件提供数据和行为（redux）它们会调用 Flux actions，并将其作为回调提供给展示组件。容器组件经常是有状态的，因为它们是(其它组件的)数据源。
+// 展示组件主要负责组件内容如何展示 容器组件主要关注组件数据如何交互 解耦了界面和数据的逻辑
 // 11.类组件(Class component)和函数式组件(Functional component)之间有何不同
 // 1.类组件允许你使用更多额外的功能，如自身状态和生命钩子，也能使用组件直接访问store并维持状态
 // 2.当组件仅是接受props，并将组件自身渲染到页面时，组件就是一个无状态组件，可以使用一个纯函数来创建一个这样的组件，这种组件也被称为哑组件或者展示组件
@@ -2523,7 +2700,7 @@ function pk() {
 // 工作流程是view调用store的dispatch接受action传入store，reducers进行state操作，view通过store的getState获取最新的数据
 // 27.redux缺点：
 // 	1.一个组件所需的数据，必须由父组件传过来
-// 2.当一个租价相关数据更新时，即使父组件不需要用到这个组件，父组件还是会重新render，影响效率，或需要写复杂的shouldComponentUpdate进行判断
+// 2.当一个组件相关数据更新时，即使父组件不需要用到这个组件，父组件还是会重新render，影响效率，或需要写复杂的shouldComponentUpdate进行判断
 // 28.何为 JSX
 // JSX是js语法的一种还能语法扩展，并拥有js的全部功能，JSX生产React元素。JSX阻止了注入攻击 所有内容在被渲染前都被转换为字符串
 //

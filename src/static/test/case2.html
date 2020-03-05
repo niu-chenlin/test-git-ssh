@@ -3,9 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #div {
+            background-color: aliceblue;
+            width: 150px;
+            height: 150px;
+        }
+        #div1 {
+            background-color: antiquewhite;
+            width: 150px;
+            height: 150px;
+        }
+        #container{
+            display: grid;
+            grid-template-columns: 100px 100px 100px;
+            grid-template-rows: 100px 100px 100px;
+            grid-auto-rows: 50px;
+        }
+
+        .item {
+            font-size: 2em;
+            text-align: center;
+            border: 1px solid #e5e4e9;
+        }
+
+        .item-1 {
+            background-color: #ef342a;
+        }
+
+        .item-2 {
+            background-color: #f68f26;
+        }
+
+        .item-3 {
+            background-color: #4ba946;
+        }
+
+        .item-4 {
+            background-color: #0376c2;
+        }
+
+        .item-5 {
+            background-color: #c077af;
+        }
+
+        .item-6 {
+            background-color: #f8d29d;
+        }
+
+        .item-7 {
+            background-color: #b5a87f;
+        }
+
+        .item-8 {
+            background-color: #d0e4a9;
+            grid-row-start: 4;
+            grid-column-start: 2;
+        }
+
+        .item-9 {
+            background-color: #4dc7ec;
+            grid-row-start: 5;
+            grid-column-start: 3;
+        }
+        p  { font-size: 100px }
+        .a { font-family: Helvetica }
+        .b { font-family: Gruppo    }
+        .c { font-family: Catamaran }
+        .box {
+            width: 50px;
+            height: 50px;
+            background: aliceblue;
+            text-align: center;
+            margin: 20px;
+        }
+    </style>
 </head>
 <body>
+<div id="div">
+    <span>行内</span>
+</div>
+<div id="div1">
+    <div>
+        块级
+    </div>
+</div>
+<div id="div2">
+    <span>1<span>行内</span></span>
+</div>
+<div>
+    <div>
 
+    </div>
+    <div>
+
+    </div>
+</div>
+<!--<div id="">-->
+    <!--<div class="box">-->
+<!--1-->
+    <!--</div>-->
+    <!--<div class="box">-->
+<!--2-->
+    <!--</div>-->
+    <!--<div class="box">-->
+<!--3-->
+    <!--</div>-->
+
+    <!--<div class="box">-->
+        <!--4-->
+    <!--</div>-->
+    <!--<div class="box">-->
+        <!--5-->
+    <!--</div>-->
+    <!--<div class="box">-->
+        <!--6-->
+    <!--</div>-->
+<!--</div>-->
+<!--<p>看看我的 margin是多少</p>-->
+<!--<div>-->
+    <!--<p>看看我的 margin是多少</p>-->
+<!--</div>-->
+<!--<div class="par">-->
+    <!--<div class="child"></div>-->
+    <!--<div class="child"></div>-->
+<!--</div>-->
 </body>
-<script src="case2.js"></script>
+<script type="text/javascript">
+    function callbackFunction(result, methodName)
+    {
+        var html = '<ul>';
+        for(var i = 0; i < result.length; i++)
+        {
+            html += '<li>' + result[i] + '</li>';
+        }
+        html += '</ul>';
+        document.getElementById('divCustomers').innerHTML = html;
+    }
+</script>
+<script src="case2.js" defer></script>
 </html>

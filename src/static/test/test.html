@@ -285,6 +285,58 @@
         .outer {width: 100px; height: 100%; padding: 100px 0 0; box-sizing: border-box ; }
         .A { height: 100px; margin: -100px 0 0; background: azure; }
         .B { height: 100%; background: bisque; }
+
+        /*.container{*/
+            /*overflow: hidden;*/
+            /*padding: 0 100px;*/
+        /*}*/
+        /*.middle{*/
+            /*width: 100%;*/
+            /*height: 200px;*/
+            /*background-color: aliceblue;*/
+            /*float: left;*/
+        /*}*/
+        /*.left{*/
+            /*position: relative;*/
+            /*left: -200px;*/
+            /*margin-left: -100%;*/
+            /*width: 200px;*/
+            /*height: 200px;*/
+            /*background-color: antiquewhite;*/
+            /*float: left;*/
+        /*}*/
+        /*.right{*/
+            /*position: relative;*/
+            /*right: -200px;*/
+            /*margin-left: -200px;*/
+            /*width: 200px;*/
+            /*height: 200px;*/
+            /*background-color: azure;*/
+            /*float: left;*/
+        /*}*/
+
+        /*.main,.left,.right{*/
+            /*height: 100px;*/
+            /*float: left;*/
+        /*}*/
+        /*.main{*/
+            /*width: 100%;*/
+            /*background-color: aqua;*/
+        /*}*/
+        /*.left{*/
+            /*width:120px;*/
+            /*margin-left: -100%;*/
+            /*background-color:cornflowerblue;*/
+        /*}*/
+        /*.right{*/
+            /*width: 120px;*/
+            /*margin-left: -120px;*/
+            /*background-color: cadetblue;*/
+        /*}*/
+        /*.inner{*/
+            /*margin-left:120px;*/
+            /*margin-right: 120px;*/
+        /*}*/
     </style>
 </head>
     <body>
@@ -348,11 +400,20 @@
                 <!--<div class="right">r</div>-->
             <!--</div>-->
             <!-- 双飞翼布局 双飞翼布局和圣杯差不多，主要是将padding换成了margin而且只需要包裹middle即可，-->
-            <!--<div class="container">-->
-                <!--<div class="middle">m</div>-->
+            <div class="container">
+                <div class="middle">m</div>
+            </div>
+            <div class="left">l</div>
+            <div class="right">r</div>
+            <!--<div class="wrapper">-->
+                <!--<div class="main">-->
+                    <!--<div class="inner">-->
+                        <!--main-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="left">left</div>-->
+                <!--<div class="right">right</div>-->
             <!--</div>-->
-            <!--<div class="left">l</div>-->
-            <!--<div class="right">r</div>-->
             <!-- 粘连布局 超出可视窗口底部往下 小于可视窗口 底部固定-->
             <!--<div class="wrap">-->
                 <!--<div class="main">-->
@@ -467,14 +528,14 @@
             <!--<div class="B"></div>-->
         <!--</div>-->
 
-        <div>
-            <ul>
-                <li>li与li之间有</li>
-                <li>看不见的空白间隔</li>
-            </ul>
-        </div>
-        <progress id="myProgress" value="33" max="100">
-        </progress>
+        <!--<div>-->
+            <!--<ul>-->
+                <!--<li>li与li之间有</li>-->
+                <!--<li>看不见的空白间隔</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+        <!--<progress id="myProgress" value="33" max="100">-->
+        <!--</progress>-->
         <script src="test.js"></script>
 
         <script type="text/javascript">
