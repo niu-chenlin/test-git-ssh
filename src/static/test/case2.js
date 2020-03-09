@@ -275,26 +275,35 @@ const baomai5 = new BMW(30, 99);
 baomai5.getPrice();                             // BWM price is 30
 baomai5 instanceof VehicleFactory.Car;       // true
 
-window.onload = function() {
-
-};
-document.onreadystatechange = function() {
-    if(document.readyState === 'loading') {
-        console.log(document.readyState)
-    }
-};
-document.addEventListener('DOMContentLoaded', function() {
-    if(document.readyState === "loading") {
-        document.write("<span>this is write</span>");
-    }
-});
-
-// document.write("<span>this is write</span>");
-let ret = [];
-for(let i = 0; i < 100001; i++) {
-    ret.push(i);
+var arr = [];
+for (var i = 0; i < 5; i++) {
+    (j => {
+        arr.push(new Promise(resolve => {
+            setTimeout(function() {
+                console.log(j);
+                resolve();
+            }, 1000 * j)
+        }));
+    })(i);
 }
-
-console.log(a);
-var a = "a";
-
+Promise.all(arr).then(() => {
+    setTimeout(function() {
+        console.log(i);
+    }, 1000)
+});
+//clientWidth: 不包括border offsetWidth: 包括border scrollWidth: 不包括border
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+function drag(ev) {
+    ev.dataTransfer.setData("Text", ev.target.id)
+}
+function drop(ev) {
+    ev.preventDefault();
+    let data = ev.dataTransfer.getData("Text");
+    ev.target.appendChild(document.getElementById(data));
+}
+var c=document.getElementById("myCanvas");
+var cxt=c.getContext("2d");
+cxt.fillStyle="#FF0000";
+cxt.fillRect(0,0,150,75);

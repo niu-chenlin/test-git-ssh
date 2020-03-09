@@ -1955,6 +1955,9 @@ function kuayu() {
 // 或者 text-plain）一个叫做预检查的机制会发送一个OPTIONS请求到服务器。如果服务器没有返回带有特殊头部的数据，简单请求GET或者POST请求仍然会发送，服务器的数据也会返回，
 // 但是浏览器会阻止Javascript获取这次请求
 //     复杂请求时，如果OPTIONS的请求，服务器没有做出适当的返回，后面真实的请求将不会发送
+//     对于简单请求浏览器会直接发送CORS请求,具体说来就是在header中加入origin请求头字段，
+//     在响应头中，返回服务器设置的相关CORS头部字段，Access-Control-Allow-Origin字段为允许跨域请求的源，请求时浏览器在请求头的Origin中说明请求的源，服务器收到后发现允许该源跨域请求，则会成功返回
+//     当发生符合非简单请求（预检请求）的条件时，浏览器会自动先发送一个options请求，如果发现服务器支持该请求，则会将真正的请求发送到后端，反之，如果浏览器发现服务端并不支持该请求，
 
 
     // 三 图片ping 使用图片ping跨域只能发送get请求，并且不能访问响应的文本，只能监听是否响应而已，可以用来追踪广告点击。
@@ -2740,7 +2743,12 @@ function pk() {
 // 	resolve()：操作成功  reject()：操作失败
 // Promise.race方法同样是将多个 Promise 实例，包装成一个新的 Promise 实例。
 
-
 //react单向数据绑定理解：单向数据量组件props是父级往下传递，你不能向上去修改父组件的数据，并且也不能在自身组件中修改props的值。（props是只读的）
 //React不算mvvm，虽然可以实现双向绑定，在React中实现双向绑定通过state属性，但如果将state绑定到视图中时，直接修改state属性是不可的，
 // 需要通过调用setState去触发更新视图，反过来视图如果要更新也需要监听视图变化 然后调用setState去同步state状态。标准MVVM应该属于给视图绑定数据后，操作数据即是更新视图
+
+//h5新特性：
+//标签：article：定义文章。 aside：定义页面内容之外的内容。audio：定义声音内容。video：定义视频内容。bdi：（ltr rtl auto）定义文本的文本方向，使其脱离其周围文本的方向设置。
+//canvas：定义图形。dialog：（open）定义对话框或窗口。footer：定义 section 或 page 的页脚。header：定义 section 或 page 的页眉。progress：进度条。time：定义日期/时间。wbr：定义可能的换行符。
+//属性：contenteditable：规定元素内容是否可编辑。contextmenu：规定元素的上下文菜单。上下文菜单在用户点击元素时显示。data-*：用于存储页面或应用程序的私有定制数据。draggable：规定元素是否可拖动。dropzone：规定在拖动被拖动数据时是否进行复制、移动或链接。
+// spellcheck：规定是否对元素进行拼写和语法检查。translate：规定是否应该翻译元素内容。

@@ -74,7 +74,7 @@
             grid-row-start: 5;
             grid-column-start: 3;
         }
-        p  { font-size: 100px }
+        /*p  { font-size: 100px }*/
         .a { font-family: Helvetica }
         .b { font-family: Gruppo    }
         .c { font-family: Catamaran }
@@ -85,25 +85,21 @@
             text-align: center;
             margin: 20px;
         }
+        .d1 {
+            width: 100px;
+            height: 100px;
+            color: aliceblue;
+        }
+        .d2 {
+            width: 80px;
+            height: 80px;
+            color: antiquewhite;
+        }
     </style>
 </head>
 <body>
-<div id="div">
-    <span>行内</span>
-</div>
-<div id="div1">
-    <div>
-        块级
-    </div>
-</div>
-<div id="div2">
-    <span>1<span>行内</span></span>
-</div>
-<div>
-    <div>
-
-    </div>
-    <div>
+<div class="d1">
+    <div class="d2">
 
     </div>
 </div>
@@ -136,6 +132,29 @@
     <!--<div class="child"></div>-->
     <!--<div class="child"></div>-->
 <!--</div>-->
+<canvas>
+    article、footer、header、nav、section
+</canvas>
+<video src=""></video>
+<audio src=""></audio>
+<article>
+    <h1>Internet Explorer 9</h1>
+    <p>Windows Internet Explorer 9（简称 IE9）于 2011 年 3 月 14 日发布.....</p>
+</article>
+<p>My family and I visited The Epcot center this summer.</p>
+
+<aside>
+    <h4>Epcot Center</h4>
+    <p>The Epcot Center is a theme park in Disney World, Florida.</p>
+</aside>
+<header>s</header>
+<section>t</section>
+<nav>h</nav>
+<div id="drop1" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+</div>
+<img id="drag1" src="../images/head/menu_top.png" height="14" width="70" draggable="true" ondragstart="drag(event)"/>
+<canvas id="myCanvas" width="200" height="100"></canvas>
 </body>
 <script type="text/javascript">
     function callbackFunction(result, methodName)
